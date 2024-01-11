@@ -15,3 +15,9 @@
 *.sx32fsl
 *.wx64fsl
 *.wx32fsl
+*.lisp~
+*.lisp#
+*.64ofasl
+*.lib
+*.fas
+log.dat
