@@ -10,8 +10,6 @@
   (:use 
     :cl
     :5)
-  (:export
-    #:executar-testes)
 )
 
 (in-package :5)

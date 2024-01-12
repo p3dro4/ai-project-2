@@ -22,6 +22,7 @@
     (33 70 84 40 66 38 92 67 98 97)
   )
 )
+(export 'tabuleiro-teste)
 
 ;; Função que retorna um tabuleiro predefinido com os cavalos colocados.
 (defun tabuleiro-jogado ()
@@ -39,6 +40,7 @@
     (33 70 84 40 66 38 92 67 -2 97)
   )
 )
+(export 'tabuleiro-jogado)
 
 ;; Função que recebe um tabuleiro e se não tiver o cavalo (branco ou preto) colocado,
 ;; coloca o cavalo na casa com maior valor na linha respetiva 
@@ -54,6 +56,7 @@
         )
   )
 )
+(export 'colocar-cavalo)
 
 ;; Função auxiliar que recebe um tabuleiro, o cavalo e a linha respetiva e coloca o cavalo na casa com maior valor na linha respetiva.
 (defun colocar-cavalo-auxiliar (tabuleiro cavalo linha-respetiva value-a-remover-se-duplo)
@@ -76,6 +79,7 @@
         (t (cons (1- (- n i)) (lista-numeros n (1+ i))))
   )
 )
+(export 'lista-numeros)
 
 ;; Função que recebe uma lista e muda aleatoriamente os seus números.
 (defun baralhar (lista)
@@ -86,6 +90,7 @@
                             (lambda (num) (= num num-aleatorio)) lista)))))
     )
 )
+(export 'baralhar)
 
 ;; Função que recebe uma lista de números (por default gera uma lista nova) 
 ;; e o tamanhho da linha (por default o valor é 10) e retorna um tabuleiro com esses parâmetros.
@@ -97,6 +102,7 @@
     (t (cons (subseq lista 0 i) (tabuleiro-aleatorio (subseq lista i) i)))
   )
 )
+(export 'tabuleiro-aleatorio)
 
 ;;; Seletores
 
@@ -106,6 +112,7 @@
   "Retorna a linha i do tabuleiro"
   (nth i tabuleiro)
 )
+(export 'linha)
 
 ;; Função que recebe dois índices e o tabuleiro e 
 ;; retorna o valor presente nessa célula do tabuleiro.
@@ -116,6 +123,7 @@
         (t (nth j (nth i tabuleiro)))
   )
 )
+(export 'celula)
 
 ;;; Funções auxiliares
 
@@ -126,6 +134,7 @@
         (t (lista-para-numero (reverse (numero-para-lista num))))
   )
 )
+(export 'simetrico)
 
 ;; Função que recebe um número e retorna t se o número for duplo i.e. se for composto por dois algarismos iguais.
 (defun duplop (num)
@@ -138,12 +147,14 @@
     )
   )
 )
+(export 'duplop)
 
 ;; Função que recebe uma linha e retorna o maior número da linha.
 (defun maior-numero-linha (linha-tabuleiro)
   "Retorna o maior número da linha"
   (apply 'max (remove-if (lambda (num) (or (null num) (< num 0))) linha-tabuleiro))
 )
+(export 'maior-numero-linha)
 
 ;; Função que recebe um tabuleiro e retorna o maior número do tabuleiro.
 (defun maior-numero-tabuleiro (tabuleiro)
@@ -157,11 +168,13 @@
         )
   )
 )
+(export 'maior-numero-tabuleiro)
 
 ;; Função que retorna todos os números de um tabuleiro numa lista.
 (defun numeros-tabuleiro (tabuleiro)
   (remove-if (lambda (num) (or (null num) (< num 0))) (juntar-linhas tabuleiro))
 )
+(export 'numeros-tabuleiro)
 
 ;; Função auxiliar que recebe um tabuleiro e retorna uma lista com todas as linhas do tabuleiro juntas.
 (defun juntar-linhas (tabuleiro)
@@ -188,6 +201,7 @@
         (t (lista-contem item (cdr lista)))
   )
 )
+(export 'lista-contem)
 
 ;; Função auxiliar que recebe um número e retorna uma lista com os algarismos do número.
 (defun numero-para-lista (num)
@@ -208,6 +222,7 @@
     )
   )
 )
+(export 'coluna-para-letra)
 
 ;; Função que recebe um índice, uma lista e um valor (por default o valor é NIL) e
 ;; substitui pelo valor pretendido nessa posição.
@@ -228,6 +243,7 @@
         (t (cons (car tabuleiro) (substituir (1- i) j (cdr tabuleiro) valor)))
   )
 )
+(export 'substituir)
 
 ;; Função que recebe o tabuleiro e o valor a procurar e
 ;; retorna a posição (i j) em que se encontra o valor. Caso o valor não se encontre no tabuleiro deverá ser retornado NIL.
@@ -238,6 +254,7 @@
         (t (posicao-valor (cdr tabuleiro) valor (1+ linha-valor)))
   )
 )
+(export 'posicao-valor)
 
 ;; Função que recebe o tabuleiro e devolve a posição (i j) em que se encontra o
 ;; cavalo. Caso o cavalo não se encontre no tabuleiro deverá ser retornado NIL.
@@ -245,6 +262,7 @@
   "Retorna a posicao do cavalo no tabuleiro"
   (posicao-valor tabuleiro cavalo)
 )
+(export 'posicao-cavalo)
 
 ;; Predicao que recebe um tabuleiro e 
 ;; verifica se o cavalo está colocado no tabuleiro.
@@ -254,6 +272,7 @@
         (t nil)
   )
 )
+(export 'cavalo-colocado-p)
 
 ;; Função que recebe o tabuleiro, o valor de destino e o valor a remover-se duplo (por default o maior valor do tabuleiro) e
 ;; retorna o tabuleiro com as regras aplicadas.
@@ -274,6 +293,7 @@
         (t tabuleiro)
   )
 )
+(export 'aplicar-regras)
 
 ;;; Movimentos
 
@@ -288,6 +308,7 @@
           (t nil)
   )
 )
+(export 'movimento-valido-p)
 
 ;; Função auxiliar que recebe a posição de destino e o tabuleiro e
 ;; verifica se a posição de destino é válida.
@@ -314,6 +335,7 @@
     )
   )
 )
+(export 'ameacado-p)
 
 ;; Função que recebe o cavalo e o tabuleiro e 
 ;;retorna uma lista com todas as posições possíveis para o cavalo.
@@ -345,6 +367,7 @@
         )
   )
 )
+(export 'mover-cavalo)
 
 ;;; Operadores
 
@@ -353,6 +376,7 @@
   "Retorna a lista de movimentos do cavalo"
   (list 'operador-1 'operador-2 'operador-3 'operador-4 'operador-5 'operador-6 'operador-7 'operador-8)
 )
+(export 'operadores)
 
 ;; Função que movimenta o cavalo 2 casas para baixo e 1 casa para a esquerda.
 (defun operador-1 (cavalo tabuleiro)
@@ -363,6 +387,7 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
+(export 'operador-1)
 
 ;; Função que movimenta o cavalo 2 casas para baixo e 1 casa para a direita.
 (defun operador-2 (cavalo tabuleiro)
@@ -373,6 +398,7 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
+(export 'operador-2)
 
 ;; Função que movimenta o cavalo 2 casas para a direita e 1 casa para baixo.
 (defun operador-3 (cavalo tabuleiro)
@@ -383,6 +409,7 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
+(export 'operador-3)
 
 ;; Função que movimenta o cavalo 2 casas para a direita e 1 casa para cima.
 (defun operador-4 (cavalo tabuleiro)
@@ -393,6 +420,7 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
+(export 'operador-4)
 
 ;; Função que movimenta o cavalo 2 casas para cima e 1 casa para a direita.
 (defun operador-5 (cavalo tabuleiro)
@@ -403,6 +431,7 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
+(export 'operador-5)
 
 ;; Função que movimenta o cavalo 2 casas para cima e 1 casa para a esquerda.
 (defun operador-6 (cavalo tabuleiro)
@@ -413,6 +442,7 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
+(export 'operador-6)
 
 ;; Função que movimenta o cavalo 2 casas para a esquerda e 1 casa para cima.
 (defun operador-7 (cavalo tabuleiro)
@@ -423,6 +453,7 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
+(export 'operador-7)
 
 ;; Função que movimenta o cavalo 2 casas para a esquerda e 1 casa para baixo.
 (defun operador-8 (cavalo tabuleiro)
@@ -433,3 +464,4 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
+(export 'operador-8)
