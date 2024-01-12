@@ -27,12 +27,12 @@
 ;; Tabuleiro jogado
 (verificar-igual
   '(
-    (94 25 54 89 21 8 36 14 41 -1)
+    (94 25 54 NIL 21 8 36 14 41 -1) 
     (78 47 56 23 5 49 13 12 26 60) 
-    (0 27 17 83 34 93 74 52 45 80)
-    (69 9 77 95 55 39 91 73 57 30) 
-    (24 15 22 86 1 11 68 79 76 72)
-    (81 48 32 2 64 16 50 37 29 71)
+    (0 27 17 83 34 93 74 52 45 80) 
+    (NIL 9 77 95 55 39 91 73 57 30) 
+    (24 15 22 86 1 11 68 79 76 72) 
+    (81 48 32 2 64 16 50 37 29 71) 
     (99 51 6 18 53 28 7 63 10 88) 
     (59 42 46 85 90 75 87 43 20 31) 
     (3 61 58 44 65 82 19 4 35 62) 
@@ -76,6 +76,37 @@
   )
   (colocar-cavalo (tabuleiro-teste) -2)
   "colocar-cavalo-preto"
+)
+
+;; Colocar cavalo preto e remover 15
+(verificar-igual
+  '(
+    (94 25 54 89 21 8 36 14 41 96) 
+    (78 47 56 23 5 49 13 12 26 60) 
+    (0 27 17 83 34 93 74 52 45 80) 
+    (69 9 77 95 55 39 91 73 57 30) 
+    (24 NIL 22 86 1 11 68 79 76 72) 
+    (81 48 32 2 64 16 50 37 29 71) 
+    (99 51 6 18 53 28 7 63 10 88) 
+    (59 42 46 85 90 75 87 43 20 31) 
+    (3 61 58 44 65 82 19 4 35 62) 
+    (33 NIL NIL 40 -2 38 NIL NIL NIL NIL)
+  )
+  (colocar-cavalo   
+    '(
+      (94 25 54 89 21 8 36 14 41 96) 
+      (78 47 56 23 5 49 13 12 26 60) 
+      (0 27 17 83 34 93 74 52 45 80) 
+      (69 9 77 95 55 39 91 73 57 30) 
+      (24 15 22 86 1 11 68 79 76 72) 
+      (81 48 32 2 64 16 50 37 29 71) 
+      (99 51 6 18 53 28 7 63 10 88) 
+      (59 42 46 85 90 75 87 43 20 31) 
+      (3 61 58 44 65 82 19 4 35 62) 
+      (33 NIL NIL 40 66 38 NIL NIL NIL NIL)
+    )
+   -2 15)
+  "colocar-cavalo-preto-e-remover-15"
 )
 
 ;; Lista de números
@@ -165,10 +196,10 @@
 
 ;; Números do tabuleiro jogado
 (verificar-igual 
-  '(94 25 54 89 21 8 36 14 41
+  '(94 25 54 21 8 36 14 41
    78 47 56 23 5 49 13 12 26 60
    0 27 17 83 34 93 74 52 45 80 
-   69 9 77 95 55 39 91 73 57 30 
+   9 77 95 55 39 91 73 57 30 
    24 15 22 86 1 11 68 79 76 72 
    81 48 32 2 64 16 50 37 29 71 
    99 51 6 18 53 28 7 63 10 88 
@@ -177,6 +208,49 @@
    33 70 84 40 66 38 92 67 97)
   (numeros-tabuleiro (tabuleiro-jogado))
   "numeros-tabuleiro-jogado"
+)
+
+;; Números do tabuleiro com NILs
+(verificar-igual 
+  '(94 25 54 89 21 8 36 14 41 96 
+    78 47 56 23 5 49 13 12 26 60 
+    0 27 17 83 34 93 74 52 45 80 
+    69 9 77 95 55 39 91 73 57 30 
+    24 22 86 1 11 68 79 76 72
+    81 48 32 2 64 16 50 37 29 71 
+    99 51 6 18 53 28 7 63 10 88 
+    59 42 46 85 90 75 87 43 20 31 
+    3 61 58 44 65 82 19 4 35 62 
+    33 40 66 38)
+  (numeros-tabuleiro 
+    '(
+      (94 25 54 89 21 8 36 14 41 96) 
+      (78 47 56 23 5 49 13 12 26 60) 
+      (0 27 17 83 34 93 74 52 45 80) 
+      (69 9 77 95 55 39 91 73 57 30) 
+      (24 NIL 22 86 1 11 68 79 76 72) 
+      (81 48 32 2 64 16 50 37 29 71) 
+      (99 51 6 18 53 28 7 63 10 88) 
+      (59 42 46 85 90 75 87 43 20 31) 
+      (3 61 58 44 65 82 19 4 35 62) 
+      (33 NIL NIL 40 66 38 NIL NIL NIL NIL)
+    )
+  )
+  "numeros-tabuleiro-com-nil"
+)
+
+;; Lista contém
+(verificar-igual
+  t
+  (lista-contem 3 '(1 2 3 4 5))
+  "lista-contem"
+)
+
+;; Lista não contém
+(verificar-igual
+  nil
+  (lista-contem 6 '(1 2 3 4 5))
+  "lista-nao-contem"
 )
 
 ;; Coluna para letra
@@ -214,7 +288,7 @@
 ;; Posição cavalo branco tabuleiro jogado
 (verificar-igual
   '(0 9)
-  (posicao-cavalo (tabuleiro-jogado) -1)
+  (posicao-cavalo -1 (tabuleiro-jogado))
   "posicao-cavalo-branco"
 )
 
@@ -266,4 +340,76 @@
   )
   (aplicar-regras (tabuleiro-teste) 55)
   "aplicar-regras-duplo"
+)
+
+;;; Movimentos
+
+;; Movimento válido cavalo branco
+(verificar-igual
+  t
+  (movimento-valido-p -1 '(2 8) (tabuleiro-jogado))
+  "movimento-valido-cavalo-branco"
+)
+
+;; Movimento inválido cavalo branco
+(verificar-igual
+  nil
+  (movimento-valido-p -1 '(2 10) (tabuleiro-jogado))
+  "movimento-invalido-cavalo-branco"
+)
+
+;; Movimento inválido cavalo branco ameaçado
+(verificar-igual
+  nil
+  (movimento-valido-p -1 '(2 8) 
+    '(
+      (94 25 54 89 21 8 36 14 41 -1)
+      (78 47 56 23 5 49 13 12 26 60) 
+      (0 27 17 83 34 93 74 52 45 80)
+      (69 9 77 95 55 39 91 73 57 30) 
+      (24 15 22 86 1 11 68 79 76 -2)
+      (81 48 32 2 64 16 50 37 29 71)
+      (99 51 6 18 53 28 7 63 10 88) 
+      (59 42 46 85 90 75 87 43 20 31) 
+      (3 61 58 44 65 82 19 4 35 62) 
+      (33 70 84 40 66 38 92 67 98 97)
+    )
+  )
+  "movimento-cavalo-branco-ameacado"
+)
+
+;; Mover cavalo branco
+(verificar-igual
+  '(
+    (94 25 NIL NIL 21 8 36 14 41 NIL) 
+    (78 47 56 23 5 49 13 12 26 60) 
+    (0 27 17 83 34 93 74 52 -1 80) 
+    (NIL 9 77 95 55 39 91 73 57 30) 
+    (24 15 22 86 1 11 68 79 76 72) 
+    (81 48 32 2 64 16 50 37 29 71) 
+    (99 51 6 18 53 28 7 63 10 88) 
+    (59 42 46 85 90 75 87 43 20 31) 
+    (3 61 58 44 65 82 19 4 35 62) 
+    (33 70 84 40 66 38 92 67 -2 97)
+  )
+  (mover-cavalo -1 '(2 8) (tabuleiro-jogado))
+  "mover-cavalo-branco"
+)
+
+;; Mover cavalo preto
+(verificar-igual
+  '(
+    (94 25 54 NIL 21 8 36 14 41 -1) 
+    (78 47 56 23 5 49 NIL 12 26 60) 
+    (0 27 17 83 34 93 74 52 45 80) 
+    (NIL 9 77 95 55 39 91 73 57 30) 
+    (24 15 22 86 1 11 68 79 76 72) 
+    (81 48 32 2 64 16 50 37 29 71) 
+    (99 51 6 18 53 28 7 63 10 88) 
+    (59 42 46 85 90 75 87 43 20 -2) 
+    (3 61 58 44 65 82 19 4 35 62) 
+    (33 70 84 40 66 38 92 67 NIL 97)
+  )
+  (mover-cavalo -2 '(7 9) (tabuleiro-jogado))
+  "mover-cavalo-preto"
 )
