@@ -2,6 +2,8 @@
 ;;;; Ficheiro de testes para jogo.lisp
 ;;;; Autores: 202100230 - Pedro Anjos, 202100225 - André Meseiro
 
+(in-package :testes)
+
 (format t "~46,1,1,'*:@< jogo-testes.lisp ~>~%")
 
 ;;; Tabuleiro
@@ -20,7 +22,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 98 97)
   )
-  (tabuleiro-teste)
+  (5::tabuleiro-teste)
   "tabuleiro-teste"
 )
 
@@ -38,7 +40,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (tabuleiro-jogado)
+  (5::tabuleiro-jogado)
   "tabuleiro-jogado"
 )
 
@@ -56,7 +58,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 98 97)
   )
-  (colocar-cavalo (tabuleiro-teste) -1)
+  (5::colocar-cavalo (5::tabuleiro-teste) -1)
   "colocar-cavalo-branco"
 )
 
@@ -74,7 +76,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (colocar-cavalo (tabuleiro-teste) -2)
+  (5::colocar-cavalo (5::tabuleiro-teste) -2)
   "colocar-cavalo-preto"
 )
 
@@ -92,7 +94,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 NIL NIL 40 -2 38 NIL NIL NIL NIL)
   )
-  (colocar-cavalo   
+  (5::colocar-cavalo   
     '(
       (94 25 54 89 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 
@@ -121,21 +123,21 @@
     29 28 27 26 25 24 23 22 21 20 
     19 18 17 16 15 14 13 12 11 10 
     9 8 7 6 5 4 3 2 1 0)
-  (lista-numeros)
+  (5::lista-numeros)
   "lista-numeros"
 )
 
 ;; Baralhar
 (verificar-nao-igual 
-  (lista-numeros)
-  (baralhar (lista-numeros))
+  (5::lista-numeros)
+  (5::baralhar (5::lista-numeros))
   "baralhar"
 )
 
 ;; Tabuleiro aleatório
 (verificar-nao-igual
-  (tabuleiro-aleatorio)
-  (tabuleiro-aleatorio)
+  (5::tabuleiro-aleatorio)
+  (5::tabuleiro-aleatorio)
   "tabuleiro-aleatorio"
 )
 
@@ -144,14 +146,14 @@
 ;; Linha
 (verificar-igual
   '(99 51 6 18 53 28 7 63 10 88)
-  (linha 6 (tabuleiro-teste))
+  (5::linha 6 (5::tabuleiro-teste))
   "linha"
 )
 
 ;; Celula
 (verificar-igual
   94
-  (celula 0 0 (tabuleiro-teste))
+  (5::celula 0 0 (5::tabuleiro-teste))
   "celula"
 )
 
@@ -160,21 +162,21 @@
 ;; Simétrico
 (verificar-igual
   15
-  (simetrico 51)
+  (5::simetrico 51)
   "simetrico"
 )
 
 ;; Duplo
 (verificar-igual
   t
-  (duplop 55)
+  (5::duplop 55)
   "duplo"
 )
 
 ;; Maior número da linha
 (verificar-igual
   96
-  (maior-numero-linha '(94 25 54 89 21 8 36 14 41 96))
+  (5::maior-numero-linha '(94 25 54 89 21 8 36 14 41 96))
   "maior-numero-linha"
 )
 
@@ -190,7 +192,7 @@
    59 42 46 85 90 75 87 43 20 31 
    3 61 58 44 65 82 19 4 35 62 
    33 70 84 40 66 38 92 67 98 97)
-  (numeros-tabuleiro (tabuleiro-teste))
+  (5::numeros-tabuleiro (5::tabuleiro-teste))
   "numeros-tabuleiro-teste"
 )
 
@@ -206,7 +208,7 @@
    59 42 46 85 90 75 87 43 20 31 
    3 61 58 44 65 82 19 4 35 62 
    33 70 84 40 66 38 92 67 97)
-  (numeros-tabuleiro (tabuleiro-jogado))
+  (5::numeros-tabuleiro (5::tabuleiro-jogado))
   "numeros-tabuleiro-jogado"
 )
 
@@ -222,7 +224,7 @@
     59 42 46 85 90 75 87 43 20 31 
     3 61 58 44 65 82 19 4 35 62 
     33 40 66 38)
-  (numeros-tabuleiro 
+  (5::numeros-tabuleiro 
     '(
       (94 25 54 89 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 
@@ -242,21 +244,21 @@
 ;; Lista contém
 (verificar-igual
   t
-  (lista-contem 3 '(1 2 3 4 5))
+  (5::lista-contem 3 '(1 2 3 4 5))
   "lista-contem"
 )
 
 ;; Lista não contém
 (verificar-igual
   nil
-  (lista-contem 6 '(1 2 3 4 5))
+  (5::lista-contem 6 '(1 2 3 4 5))
   "lista-nao-contem"
 )
 
 ;; Coluna para letra
 (verificar-igual
   #\c
-  (coluna-para-letra 2)
+  (5::coluna-para-letra 2)
   "coluna-para-letra"
 )
 
@@ -274,35 +276,35 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 98 97)
   )
-  (substituir 0 9 (tabuleiro-teste) -1)
+  (5::substituir 0 9 (5::tabuleiro-teste) -1)
   "substituir"
 )
 
 ;; Posição valor
 (verificar-igual
   '(0 9)
-  (posicao-valor (tabuleiro-teste) 96)
+  (5::posicao-valor (5::tabuleiro-teste) 96)
   "posicao-valor"
 )
 
 ;; Posição cavalo branco tabuleiro jogado
 (verificar-igual
   '(0 9)
-  (posicao-cavalo -1 (tabuleiro-jogado))
+  (5::posicao-cavalo -1 (5::tabuleiro-jogado))
   "posicao-cavalo-branco"
 )
 
 ;; Cavalo branco colocado tabuleiro teste
 (verificar-igual
   nil
-  (cavalo-colocado-p (tabuleiro-teste) -1)
+  (5::cavalo-colocado-p (5::tabuleiro-teste) -1)
   "cavalo-branco-colocado-teste"
 )
 
 ;; Cavalo branco colocado tabuleiro teste
 (verificar-igual
   t
-  (cavalo-colocado-p (tabuleiro-jogado) -1)
+  (5::cavalo-colocado-p (5::tabuleiro-jogado) -1)
   "cavalo-branco-colocado-jogado"
 )
 
@@ -320,7 +322,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 98 97)
   )
-  (aplicar-regras (tabuleiro-teste) 96)
+  (5::aplicar-regras (5::tabuleiro-teste) 96)
   "aplicar-regras-simetrico"
 )
 
@@ -338,7 +340,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 98 97)
   )
-  (aplicar-regras (tabuleiro-teste) 55)
+  (5::aplicar-regras (5::tabuleiro-teste) 55)
   "aplicar-regras-duplo"
 )
 
@@ -347,21 +349,21 @@
 ;; Movimento válido cavalo branco
 (verificar-igual
   t
-  (movimento-valido-p -1 '(2 8) (tabuleiro-jogado))
+  (5::movimento-valido-p -1 '(2 8) (5::tabuleiro-jogado))
   "movimento-valido-cavalo-branco"
 )
 
 ;; Movimento inválido cavalo branco
 (verificar-igual
   nil
-  (movimento-valido-p -1 '(2 10) (tabuleiro-jogado))
+  (5::movimento-valido-p -1 '(2 10) (5::tabuleiro-jogado))
   "movimento-invalido-cavalo-branco"
 )
 
 ;; Movimento inválido cavalo branco ameaçado
 (verificar-igual
   nil
-  (movimento-valido-p -1 '(2 8) 
+  (5::movimento-valido-p -1 '(2 8) 
     '(
       (94 25 54 89 21 8 36 14 41 -1)
       (78 47 56 23 5 49 13 12 26 60) 
@@ -392,7 +394,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (mover-cavalo -1 '(2 8) (tabuleiro-jogado))
+  (5::mover-cavalo -1 '(2 8) (5::tabuleiro-jogado))
   "mover-cavalo-branco"
 )
 
@@ -410,6 +412,6 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 NIL 97)
   )
-  (mover-cavalo -2 '(7 9) (tabuleiro-jogado))
+  (5::mover-cavalo -2 '(7 9) (5::tabuleiro-jogado))
   "mover-cavalo-preto"
 )

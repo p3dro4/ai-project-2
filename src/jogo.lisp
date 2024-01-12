@@ -2,6 +2,8 @@
 ;;;; Código relacionado com o problema
 ;;;; Autores: 202100230 - Pedro Anjos, 202100225 - André Meseiro
 
+(in-package :5)
+
 ;;; Tabuleiros
 
 ;; Função que retorna um tabuleiro predefinido.
@@ -202,7 +204,7 @@
   (let ((letra #\a))
     (cond ((not (numberp num)) (error "O argumento não é um número"))
           ((= num 0) letra)
-          (t (int-char (+ (char-int letra) num)))
+          (t (code-char (+ (char-int letra) num)))
     )
   )
 )
@@ -341,5 +343,93 @@
               (aplicar-regras (substituir (first destino) (second destino) tabuleiro-substituido-posicao cavalo) valor-destino)
             )
         )
+  )
+)
+
+;;; Operadores
+
+;; Função que retorna a lista de operadores aplicáveis a um estado.
+(defun operadores ()
+  "Retorna a lista de movimentos do cavalo"
+  (list 'operador-1 'operador-2 'operador-3 'operador-4 'operador-5 'operador-6 'operador-7 'operador-8)
+)
+
+;; Função que movimenta o cavalo 2 casas para baixo e 1 casa para a esquerda.
+(defun operador-1 (cavalo tabuleiro)
+  "Movimenta o cavalo 2 casas para baixo e 1 casa para a esquerda"
+  (let* ((posicao (posicao-cavalo cavalo tabuleiro))
+         (destino (list (+ (first posicao) 2) (1- (second posicao))))
+        )
+        (mover-cavalo cavalo destino tabuleiro)
+  )
+)
+
+;; Função que movimenta o cavalo 2 casas para baixo e 1 casa para a direita.
+(defun operador-2 (cavalo tabuleiro)
+  "Movimenta o cavalo 2 casas para baixo e 1 casa para a direita"
+  (let* ((posicao (posicao-cavalo cavalo tabuleiro))
+         (destino (list (+ (first posicao) 2) (1+ (second posicao))))
+        )
+        (mover-cavalo cavalo destino tabuleiro)
+  )
+)
+
+;; Função que movimenta o cavalo 2 casas para a direita e 1 casa para baixo.
+(defun operador-3 (cavalo tabuleiro)
+  "Movimenta o cavalo 2 casas para a direita e 1 casa para baixo"
+  (let* ((posicao (posicao-cavalo cavalo tabuleiro))
+         (destino (list (1+ (first posicao)) (+ (second posicao) 2)))
+        )
+        (mover-cavalo cavalo destino tabuleiro)
+  )
+)
+
+;; Função que movimenta o cavalo 2 casas para a direita e 1 casa para cima.
+(defun operador-4 (cavalo tabuleiro)
+  "Movimenta o cavalo 2 casas para a direita e 1 casa para cima"
+  (let* ((posicao (posicao-cavalo cavalo tabuleiro))
+         (destino (list (1- (first posicao)) (+ (second posicao) 2)))
+        )
+        (mover-cavalo cavalo destino tabuleiro)
+  )
+)
+
+;; Função que movimenta o cavalo 2 casas para cima e 1 casa para a direita.
+(defun operador-5 (cavalo tabuleiro)
+  "Movimenta o cavalo 2 casas para cima e 1 casa para a direita"
+  (let* ((posicao (posicao-cavalo cavalo tabuleiro))
+         (destino (list (- (first posicao) 2) (1+ (second posicao))))
+        )
+        (mover-cavalo cavalo destino tabuleiro)
+  )
+)
+
+;; Função que movimenta o cavalo 2 casas para cima e 1 casa para a esquerda.
+(defun operador-6 (cavalo tabuleiro)
+  "Movimenta o cavalo 2 casas para cima e 1 casa para a esquerda"
+  (let* ((posicao (posicao-cavalo cavalo tabuleiro))
+         (destino (list (- (first posicao) 2) (1- (second posicao))))
+        )
+        (mover-cavalo cavalo destino tabuleiro)
+  )
+)
+
+;; Função que movimenta o cavalo 2 casas para a esquerda e 1 casa para cima.
+(defun operador-7 (cavalo tabuleiro)
+  "Movimenta o cavalo 2 casas para a esquerda e 1 casa para cima"
+  (let* ((posicao (posicao-cavalo cavalo tabuleiro))
+         (destino (list (1- (first posicao)) (- (second posicao) 2)))
+        )
+        (mover-cavalo cavalo destino tabuleiro)
+  )
+)
+
+;; Função que movimenta o cavalo 2 casas para a esquerda e 1 casa para baixo.
+(defun operador-8 (cavalo tabuleiro)
+  "Movimenta o cavalo 2 casas para a esquerda e 1 casa para baixo"
+  (let* ((posicao (posicao-cavalo cavalo tabuleiro))
+         (destino (list (1+ (first posicao)) (- (second posicao) 2)))
+        )
+        (mover-cavalo cavalo destino tabuleiro)
   )
 )
