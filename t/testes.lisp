@@ -40,6 +40,7 @@
   (load (merge-pathnames "t/algoritmo-testes.lisp" (5::caminho-raiz)) :verbose nil)
   (load (merge-pathnames "t/interact-testes.lisp" (5::caminho-raiz)) :verbose nil)
 )
+(export 'executar-testes)
 
 (defun executar-jogo-testes ()
   "Executa os testes do jogo"

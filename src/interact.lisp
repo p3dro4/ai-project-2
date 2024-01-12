@@ -3,12 +3,16 @@
 ;;;; Autores: 202100230 - Pedro Anjos, 202100225 - André Meseiro
 
 (defpackage :5
-  (:use :cl)
+  (:use 
+    :cl
+    :cl-user
+  )
 )
 
 (defpackage :testes
   (:use 
     :cl
+    :cl-user
     :5)
 )
 
