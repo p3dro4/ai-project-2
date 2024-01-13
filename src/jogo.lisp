@@ -500,3 +500,7 @@
   )
 )
 (export 'operador-8)
+
+;;; Funções relacionadas com o algoritmo de pesquisa
+
+;; TODO: Função avaliar-no
