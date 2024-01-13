@@ -58,7 +58,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 98 97)
   )
-  (colocar-cavalo (tabuleiro-teste) -1)
+  (colocar-cavalo (tabuleiro-teste) *cavalo-branco*)
   "colocar-cavalo-branco"
 )
 
@@ -276,7 +276,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 98 97)
   )
-  (substituir 0 9 (tabuleiro-teste) -1)
+  (substituir 0 9 (tabuleiro-teste) *cavalo-branco*)
   "substituir"
 )
 
@@ -290,21 +290,21 @@
 ;; Posição cavalo branco tabuleiro jogado
 (verificar-igual
   '(0 9)
-  (posicao-cavalo -1 (tabuleiro-jogado))
+  (posicao-cavalo *cavalo-branco* (tabuleiro-jogado))
   "posicao-cavalo-branco"
 )
 
 ;; Cavalo branco colocado tabuleiro teste
 (verificar-igual
   nil
-  (cavalo-colocado-p (tabuleiro-teste) -1)
+  (cavalo-colocado-p (tabuleiro-teste) *cavalo-branco*)
   "cavalo-branco-colocado-teste"
 )
 
 ;; Cavalo branco colocado tabuleiro teste
 (verificar-igual
   t
-  (cavalo-colocado-p (tabuleiro-jogado) -1)
+  (cavalo-colocado-p (tabuleiro-jogado) *cavalo-branco*)
   "cavalo-branco-colocado-jogado"
 )
 
@@ -349,21 +349,21 @@
 ;; Movimento válido cavalo branco
 (verificar-igual
   t
-  (movimento-valido-p -1 '(2 8) (tabuleiro-jogado))
+  (movimento-valido-p *cavalo-branco* '(2 8) (tabuleiro-jogado))
   "movimento-valido-cavalo-branco"
 )
 
 ;; Movimento inválido cavalo branco
 (verificar-igual
   nil
-  (movimento-valido-p -1 '(2 10) (tabuleiro-jogado))
+  (movimento-valido-p *cavalo-branco* '(2 10) (tabuleiro-jogado))
   "movimento-invalido-cavalo-branco"
 )
 
 ;; Movimento inválido cavalo branco ameaçado
 (verificar-igual
   nil
-  (movimento-valido-p -1 '(2 8) 
+  (movimento-valido-p *cavalo-branco* '(2 8) 
     '(
       (94 25 54 89 21 8 36 14 41 -1)
       (78 47 56 23 5 49 13 12 26 60) 
@@ -394,7 +394,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (mover-cavalo -1 '(2 8) (tabuleiro-jogado))
+  (mover-cavalo *cavalo-branco* '(2 8) (tabuleiro-jogado))
   "mover-cavalo-branco"
 )
 
@@ -432,7 +432,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (operador-1 -1 
+  (operador-1 *cavalo-branco* 
     '(
       (94 25 54 NIL 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 
@@ -463,7 +463,7 @@
     (3 61 58 44 65 NIL 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (operador-2 -1 
+  (operador-2 *cavalo-branco* 
     '(
       (94 25 54 NIL 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 
@@ -494,7 +494,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (operador-3 -1 
+  (operador-3 *cavalo-branco* 
     '(
       (94 25 54 NIL 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 
@@ -525,7 +525,7 @@
     (3 61 58 44 65 82 NIL 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (operador-4 -1 
+  (operador-4 *cavalo-branco* 
     '(
       (94 25 54 NIL 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 
@@ -556,7 +556,7 @@
     (3 61 58 44 65 82 19 4 35 62)
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (operador-5 -1 
+  (operador-5 *cavalo-branco* 
     '(
       (94 25 54 NIL 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 
@@ -587,7 +587,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 NIL 92 67 -2 97)
   )
-  (operador-6 -1 
+  (operador-6 *cavalo-branco* 
     '(
       (94 25 54 NIL 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 
@@ -618,7 +618,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (operador-7 -1 
+  (operador-7 *cavalo-branco* 
     '(
       (94 25 54 NIL 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 
@@ -649,7 +649,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (operador-8 -1 
+  (operador-8 *cavalo-branco* 
     '(
       (94 25 54 NIL 21 8 36 14 41 96) 
       (78 47 56 23 5 49 13 12 26 60) 

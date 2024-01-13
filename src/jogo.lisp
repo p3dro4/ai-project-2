@@ -4,6 +4,12 @@
 
 (in-package :5)
 
+;;; Constantes
+(defvar *cavalo-branco* -1)
+(export '*cavalo-branco*)
+(defvar *cavalo-preto* -2)
+(export '*cavalo-preto*)
+
 ;;; Tabuleiros
 
 ;; Função que retorna um tabuleiro predefinido.
@@ -48,10 +54,10 @@
 (defun colocar-cavalo (tabuleiro cavalo &optional (valor-a-remover-se-duplo (maior-numero-tabuleiro tabuleiro)))
   "Coloca o cavalo na casa com maior valor na linha respetiva"
   (cond ((not (numberp cavalo)) (error "O cavalo tem de ser um numero"))
-        ((not (or (= cavalo -1) (= cavalo -2))) (error "O cavalo tem de ser -1 ou -2"))
+        ((not (or (= cavalo *cavalo-branco*) (= cavalo *cavalo-preto*))) (error "O cavalo tem de ser -1 ou -2"))
         ((cavalo-colocado-p tabuleiro cavalo) nil)
-        (t (cond ((= cavalo -1) (colocar-cavalo-auxiliar tabuleiro cavalo 0 valor-a-remover-se-duplo))
-                 ((= cavalo -2) (colocar-cavalo-auxiliar tabuleiro cavalo (1- (length tabuleiro)) valor-a-remover-se-duplo))
+        (t (cond ((= cavalo *cavalo-branco*) (colocar-cavalo-auxiliar tabuleiro cavalo 0 valor-a-remover-se-duplo))
+                 ((= cavalo *cavalo-preto*) (colocar-cavalo-auxiliar tabuleiro cavalo (1- (length tabuleiro)) valor-a-remover-se-duplo))
            )
         )
   )
@@ -120,8 +126,8 @@
             (cond (numero-linha (format saida "~2,'0d " (1+ i))))
             (format saida "|" )
             (mapcar (lambda (cel) (cond 
-              ((eq cel -1) (format saida " BB "))
-              ((eq cel -2) (format saida " PP "))
+              ((eq cel *cavalo-branco*) (format saida " BB "))
+              ((eq cel *cavalo-preto*) (format saida " PP "))
               ((numberp cel) (format saida " ~2,'0d " cel))
               (t (format saida " .. "))
             )) (linha i tabuleiro))
@@ -356,7 +362,7 @@
 ;; verifica se a posição de destino está ameaçada pelo cavalo oposto.
 (defun ameacado-p (cavalo destino tabuleiro)
   "Verifica se a posicao de destino está ameacada pelo cavalo oposto"
-  (let ((cavalo-oposto (cond ((= cavalo -1) -2) ((= cavalo -2) -1))))
+  (let ((cavalo-oposto (cond ((= cavalo *cavalo-branco*) *cavalo-preto*) ((= cavalo *cavalo-preto*) *cavalo-branco*))))
     (cond ((null destino) nil)
           ((null (posicao-cavalo cavalo-oposto tabuleiro)) nil)
           ((null (movimentos-possiveis cavalo-oposto tabuleiro)) nil)
