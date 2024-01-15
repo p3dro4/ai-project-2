@@ -40,8 +40,8 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (tabuleiro-jogado)
-  "tabuleiro-jogado"
+  (tabuleiro-ambos-colocados)
+  "tabuleiro-ambos-colocados"
 )
 
 ;; Colocar cavalo branco
@@ -109,6 +109,13 @@
     )
    -2 15)
   "colocar-cavalo-preto-e-remover-15"
+)
+
+;; Colocar cavalo preto após colocar cavalo branco
+(verificar-igual 
+  (tabuleiro-ambos-colocados)
+  (colocar-cavalo (colocar-cavalo (tabuleiro-teste) *cavalo-branco*) *cavalo-preto*)
+  "colocar-cavalo-preto-apos-branco"
 )
 
 ;; Lista de números
@@ -208,8 +215,8 @@
    59 42 46 85 90 75 87 43 20 31 
    3 61 58 44 65 82 19 4 35 62 
    33 70 84 40 66 38 92 67 97)
-  (numeros-tabuleiro (tabuleiro-jogado))
-  "numeros-tabuleiro-jogado"
+  (numeros-tabuleiro (tabuleiro-ambos-colocados))
+  "numeros-tabuleiro-ambos-colocados"
 )
 
 ;; Números do tabuleiro com NILs
@@ -290,7 +297,7 @@
 ;; Posição cavalo branco tabuleiro jogado
 (verificar-igual
   '(0 9)
-  (posicao-cavalo *cavalo-branco* (tabuleiro-jogado))
+  (posicao-cavalo *cavalo-branco* (tabuleiro-ambos-colocados))
   "posicao-cavalo-branco"
 )
 
@@ -304,7 +311,7 @@
 ;; Cavalo branco colocado tabuleiro teste
 (verificar-igual
   t
-  (cavalo-colocado-p (tabuleiro-jogado) *cavalo-branco*)
+  (cavalo-colocado-p (tabuleiro-ambos-colocados) *cavalo-branco*)
   "cavalo-branco-colocado-jogado"
 )
 
@@ -349,14 +356,14 @@
 ;; Movimento válido cavalo branco
 (verificar-igual
   t
-  (movimento-valido-p *cavalo-branco* '(2 8) (tabuleiro-jogado))
+  (movimento-valido-p *cavalo-branco* '(2 8) (tabuleiro-ambos-colocados))
   "movimento-valido-cavalo-branco"
 )
 
 ;; Movimento inválido cavalo branco
 (verificar-igual
   nil
-  (movimento-valido-p *cavalo-branco* '(2 10) (tabuleiro-jogado))
+  (movimento-valido-p *cavalo-branco* '(2 10) (tabuleiro-ambos-colocados))
   "movimento-invalido-cavalo-branco"
 )
 
@@ -394,7 +401,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 -2 97)
   )
-  (mover-cavalo *cavalo-branco* '(2 8) (tabuleiro-jogado))
+  (mover-cavalo *cavalo-branco* '(2 8) (tabuleiro-ambos-colocados))
   "mover-cavalo-branco"
 )
 
@@ -412,7 +419,7 @@
     (3 61 58 44 65 82 19 4 35 62) 
     (33 70 84 40 66 38 92 67 NIL 97)
   )
-  (mover-cavalo -2 '(7 9) (tabuleiro-jogado))
+  (mover-cavalo -2 '(7 9) (tabuleiro-ambos-colocados))
   "mover-cavalo-preto"
 )
 
@@ -671,28 +678,28 @@
 ;; Pontuação nó cavalo branco
 (verificar-igual
   96
-  (no-pontuacao (cria-no (tabuleiro-jogado) 1 (cria-no (tabuleiro-teste))) *cavalo-branco*)
+  (no-pontuacao (cria-no (tabuleiro-ambos-colocados) 2 (cria-no (tabuleiro-cavalo-branco) 1 (cria-no (tabuleiro-teste)))) *cavalo-branco*)
   "no-pontuacao-cavalo-branco"
 )
 
 ;; Pontuação nó cavalo preto
 (verificar-igual
   98
-  (no-pontuacao (cria-no (tabuleiro-jogado) 1 (cria-no (tabuleiro-teste))) *cavalo-preto*)
+  (no-pontuacao (cria-no (tabuleiro-ambos-colocados) 2 (cria-no (tabuleiro-cavalo-branco) 1 (cria-no (tabuleiro-teste)))) *cavalo-preto*)
   "no-pontuacao-cavalo-preto"
 )
 
 ;; Pontuação nó após movimento do cavalo branco
 (verificar-igual
   141
-  (no-pontuacao (cria-no (operador-1 *cavalo-branco* (tabuleiro-jogado)) 2 (cria-no (tabuleiro-jogado) 1 (cria-no (tabuleiro-teste)))) *cavalo-branco*)
+  (no-pontuacao (cria-no (operador-1 *cavalo-branco* (tabuleiro-ambos-colocados)) 3 (cria-no (tabuleiro-ambos-colocados) 2 (cria-no (tabuleiro-cavalo-branco) 1 (cria-no (tabuleiro-teste))))) *cavalo-branco*)
   "no-pontuacao-cavalo-branco-movimento"
 )
 
 ;; Pontuação nó após movimento do cavalo branco que 
 (verificar-igual
   0
-  (no-pontuacao (cria-no (operador-2 *cavalo-branco* (tabuleiro-jogado)) 2 (cria-no (tabuleiro-jogado) 1 (cria-no (tabuleiro-teste)))) *cavalo-branco*)
+  (no-pontuacao (cria-no (operador-2 *cavalo-branco* (tabuleiro-ambos-colocados)) 3 (cria-no (tabuleiro-ambos-colocados) 2 (cria-no (tabuleiro-cavalo-branco) 1 (cria-no (tabuleiro-teste))))) *cavalo-branco*)
   "no-pontuacao-cavalo-branco-mov-nil"
 )
 
