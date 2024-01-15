@@ -695,3 +695,5 @@
   (no-pontuacao (cria-no (operador-2 *cavalo-branco* (tabuleiro-jogado)) 2 (cria-no (tabuleiro-jogado) 1 (cria-no (tabuleiro-teste)))) *cavalo-branco*)
   "no-pontuacao-cavalo-branco-mov-nil"
 )
+
+(format t "~46,1,1,'*:@< fim dos testes ~>~%~%")

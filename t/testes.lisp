@@ -35,6 +35,7 @@
 ;; Função que carrega todos os testes
 (defun executar-testes ()
   "Executa todos os testes"
+  (load (merge-pathnames "src/interact" (5::caminho-raiz)) :verbose nil)
   ;; Executar ficheiros de teste
   (load (merge-pathnames "t/jogo-testes.lisp" (5::caminho-raiz)) :verbose nil)
   (load (merge-pathnames "t/algoritmo-testes.lisp" (5::caminho-raiz)) :verbose nil)
@@ -45,17 +46,17 @@
 (defun executar-jogo-testes ()
   "Executa os testes do jogo"
   ;; Executar ficheiro de teste
-  (load (merge-pathnames "t/jogo-testes.lisp" (caminho-raiz)) :verbose nil)
+  (load (merge-pathnames "t/jogo-testes.lisp" (5::caminho-raiz)) :verbose nil)
 )
 
 (defun executar-algoritmo-testes ()
   "Executa os testes do algoritmo"
   ;; Executar ficheiro de teste
-  (load (merge-pathnames "t/algoritmo-testes.lisp" (caminho-raiz)) :verbose nil)
+  (load (merge-pathnames "t/algoritmo-testes.lisp" (5::caminho-raiz)) :verbose nil)
 )
 
 (defun executar-interact-testes ()
   "Executa os testes do interact"
   ;; Executar ficheiro de teste
-  (load (merge-pathnames "t/interact-testes.lisp" (caminho-raiz)) :verbose nil)
+  (load (merge-pathnames "t/interact-testes.lisp" (5::caminho-raiz)) :verbose nil)
 )
