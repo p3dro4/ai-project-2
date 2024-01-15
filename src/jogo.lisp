@@ -501,6 +501,20 @@
 )
 (export 'operador-8)
 
-;;; Funções relacionadas com o algoritmo de pesquisa
+;;; Funções relacionadas com o algoritmo de procura
+
+;; Função que recebe um nó e um cavalo e retorna a pontuação desse cavalo.
+(defun no-pontuacao (no cavalo &optional (pontuacao 0))
+  "Função que retorna a pontuação de um nó"
+  (cond ((null (no-pai no)) 0)
+        ((null (no-estado no)) 0)
+        ((null (posicao-cavalo cavalo (no-estado no))) 0)
+        (t (let ((posicao (posicao-cavalo cavalo (no-estado no))))
+            (+ pontuacao (celula (first posicao) (second posicao) (no-estado (no-pai no))) (no-pontuacao (no-pai no) cavalo pontuacao))
+           )
+        )
+  )
+)
+(export 'no-pontuacao)
 
 ;; TODO: Função avaliar-no

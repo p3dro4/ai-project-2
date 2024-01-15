@@ -665,3 +665,33 @@
   )
   "operador-8"
 )
+
+;;; Funções relacionadas com o algoritmo de procura
+
+;; Pontuação nó cavalo branco
+(verificar-igual
+  96
+  (no-pontuacao (cria-no (tabuleiro-jogado) 1 (cria-no (tabuleiro-teste))) *cavalo-branco*)
+  "no-pontuacao-cavalo-branco"
+)
+
+;; Pontuação nó cavalo preto
+(verificar-igual
+  98
+  (no-pontuacao (cria-no (tabuleiro-jogado) 1 (cria-no (tabuleiro-teste))) *cavalo-preto*)
+  "no-pontuacao-cavalo-preto"
+)
+
+;; Pontuação nó após movimento do cavalo branco
+(verificar-igual
+  141
+  (no-pontuacao (cria-no (operador-1 *cavalo-branco* (tabuleiro-jogado)) 2 (cria-no (tabuleiro-jogado) 1 (cria-no (tabuleiro-teste)))) *cavalo-branco*)
+  "no-pontuacao-cavalo-branco-movimento"
+)
+
+;; Pontuação nó após movimento do cavalo branco que 
+(verificar-igual
+  0
+  (no-pontuacao (cria-no (operador-2 *cavalo-branco* (tabuleiro-jogado)) 2 (cria-no (tabuleiro-jogado) 1 (cria-no (tabuleiro-teste)))) *cavalo-branco*)
+  "no-pontuacao-cavalo-branco-mov-nil"
+)

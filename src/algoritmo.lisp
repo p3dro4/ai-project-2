@@ -11,6 +11,7 @@
   "Cria um nó com o estado, o custo e o nó pai"
   (list estado g pai)
 )
+(export 'cria-no)
 
 ;;; Seletores
 
@@ -19,18 +20,21 @@
   "Retorna o estado do nó dado como argumento"
   (first no)
 )
+(export 'no-estado)
 
 ;; Retorna o custo do nó dado como argumento
 (defun no-profundidade (no)
   "Retorna o custo do nó dado como argumento"
   (second no)
 )
+(export 'no-profundidade)
 
 ;; Retorna o nó pai do nó dado como argumento
 (defun no-pai (no)
   "Retorna o nó pai do nó dado como argumento"
-  (fourth no)
+  (third no)
 )
+(export 'no-pai)
 
 ;;; Algoritmo alfa-beta
 
