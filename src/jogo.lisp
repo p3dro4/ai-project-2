@@ -144,8 +144,8 @@
             (cond (numero-linha (format saida "~2,'0d " (1+ i))))
             (format saida "|" )
             (mapcar (lambda (cel) (cond 
-              ((eq cel *cavalo-branco*) (format saida " BB "))
-              ((eq cel *cavalo-preto*) (format saida " PP "))
+              ((eq cel *cavalo-branco*) (format saida " CB "))
+              ((eq cel *cavalo-preto*) (format saida " CP "))
               ((numberp cel) (format saida " ~2,'0d " cel))
               (t (format saida " .. "))
             )) (linha i tabuleiro))
@@ -326,6 +326,15 @@
   )
 )
 (export 'cavalo-colocado-p)
+
+;; Função que recebe um cavalo e retorna o cavalo oposto.
+(defun trocar-cavalo (cavalo)
+  "Troca o cavalo"
+  (cond ((= cavalo *cavalo-branco*) *cavalo-preto*)
+        ((= cavalo *cavalo-preto*) *cavalo-branco*)
+        (t nil)
+  )
+)
 
 ;; Função que recebe o tabuleiro, o valor de destino e o valor a remover-se duplo (por default o maior valor do tabuleiro) e
 ;; retorna o tabuleiro com as regras aplicadas.
@@ -538,4 +547,15 @@
 )
 (export 'no-pontuacao)
 
-;; TODO: Função avaliar-no
+;; Função utilidade que recebe um nó e um cavalo e retorna utilidade desse nó.
+(defun avaliar-no (no cavalo)
+  "Função que avalia um nó"
+  (let ((pontuacao (no-pontuacao no cavalo))
+        (pontuacao-oposto (no-pontuacao no (trocar-cavalo cavalo))))
+    (cond ((= cavalo *cavalo-branco*) (- pontuacao pontuacao-oposto))
+          ((= cavalo *cavalo-preto*) (- pontuacao-oposto pontuacao))
+          (t 0)
+    )
+  )
+)
+(export 'avaliar-no)

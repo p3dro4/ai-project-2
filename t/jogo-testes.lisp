@@ -703,4 +703,25 @@
   "no-pontuacao-cavalo-branco-mov-nil"
 )
 
+;; Avaliar nó cavalo branco após movimento
+(verificar-igual
+  43
+  (avaliar-no (cria-no (operador-1 *cavalo-branco* (tabuleiro-ambos-colocados)) 3 (cria-no (tabuleiro-ambos-colocados) 2 (cria-no (tabuleiro-cavalo-branco) 1 (cria-no (tabuleiro-teste))))) *cavalo-branco*)
+  "avaliar-no-cavalo-branco-apos-mov"
+)
+
+;; Avaliar nó sem cavalo colocado
+(verificar-igual
+  0
+  (avaliar-no (cria-no (tabuleiro-teste)) *cavalo-branco*)
+  "avaliar-no-sem-cavalo-colocado"
+)
+
+;; Avaliar nó cavalo preto após movimento
+(verificar-igual
+  -21
+  (avaliar-no (cria-no (operador-7 *cavalo-preto* (tabuleiro-ambos-colocados)) 3 (cria-no (tabuleiro-ambos-colocados) 2 (cria-no (tabuleiro-cavalo-branco) 1 (cria-no (tabuleiro-teste))))) *cavalo-preto*)
+  "avaliar-no-cavalo-preto-apos-mov"
+)
+
 (format t "~46,1,1,'*:@< fim dos testes ~>~%~%")
