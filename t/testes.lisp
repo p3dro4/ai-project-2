@@ -9,10 +9,11 @@
 ;; Função que verifica se o valor esperado é igual ao valor real
 (defun verificar-igual (valor-esperado valor-real &optional (nome-teste "*TESTE-GENERICO*"))
   "Verifica se o valor esperado é igual ao valor real"
-  (cond ((equal valor-real valor-esperado) (format t "# ~40,1,1,@<'~a'~> | -~%" nome-teste))
+  (cond ((equal valor-real valor-esperado) (progn (format t "# ~40,1,1,@<'~a'~> | -~%" nome-teste) t))
         (t (progn (format t "# ~40,1,1,@<'~a'~> | X~%" nome-teste)
                   (format t "  = valor esperado: ~a~%" valor-esperado)
                   (format t "  = valor obtido: ~a~%" valor-real)
+                  nil
             )
         )
   )
@@ -21,10 +22,11 @@
 ;; Função que verifica se o valor esperado é diferente do valor real
 (defun verificar-nao-igual (valor-esperado valor-real &optional (nome-teste "*TESTE-GENERICO*"))
   "Verifica se o valor esperado é diferente do valor real"
-  (cond ((not (equal valor-real valor-esperado)) (format t "# ~40,1,1,@<'~a'~> | -~%" nome-teste))
+  (cond ((not (equal valor-real valor-esperado)) (progn (format t "# ~40,1,1,@<'~a'~> | -~%" nome-teste) t))
         (t (progn (format t "# ~40,1,1,@<'~a'~> | X~%" nome-teste)
                   (format t "  = valor esperado: ~a~%" valor-esperado)
                   (format t "  = valor obtido: ~a~%" valor-real)
+                  nil
             )
         )
   )
