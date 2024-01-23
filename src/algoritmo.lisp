@@ -53,6 +53,7 @@
     )
 )
 
+;; Função auxiliar do negamax
 (defun negamax-auxiliar (no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao)
   "Função auxiliar do negamax"
   (cond ((null sucessores) most-negative-double-float)
