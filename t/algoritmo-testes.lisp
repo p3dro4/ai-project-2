@@ -174,17 +174,10 @@
       "no-pai"
     )
 
-    ;; Nó máximo utilidade
-    (verificar-igual
-      (list (5::cria-no (5::operador-1 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) (funcall '5::avaliar-no (5::cria-no (5::operador-1 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) 5::*cavalo-branco*))
-      (5::no-max-utilidade (list (list (5::cria-no (5::operador-1 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) (funcall '5::avaliar-no (5::cria-no (5::operador-1 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) 5::*cavalo-branco*)) (list (5::no-teste) (funcall '5::avaliar-no (5::no-teste) 5::*cavalo-branco*)) (list (5::cria-no (5::operador-8 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) (funcall '5::avaliar-no (5::cria-no (5::operador-8 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) 5::*cavalo-branco*))) 5::*cavalo-branco*)
-      "no-max-utilidade"
-    )
-
     ;; Negamax com cortes alfa-beta
     (verificar-igual
       91
-      (second (5::negamax-alfabeta (5::no-teste) 3 most-negative-double-float most-positive-double-float 5::*cavalo-branco* (list 5::*cavalo-branco* 5::*cavalo-preto*) '5::sucessores '5::avaliar-no))
+      (5::negamax (5::no-teste) 3 most-negative-double-float most-positive-double-float 5::*cavalo-branco* (list 5::*cavalo-branco* 5::*cavalo-preto*) '5::sucessores '5::avaliar-no)
       "negamax-alfabeta"
     )
   )))
