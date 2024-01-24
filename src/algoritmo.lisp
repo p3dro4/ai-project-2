@@ -40,13 +40,13 @@
 
 ;; Função negamax com cortes alfabeta que recebe um nó, uma profundidade, um alfa, um beta, um jogador, uma lista de jogadores, uma função de sucessores e uma função de avaliação 
 ;; e retorna o valor do nó
-(defun negamax (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao)
+(defun negamax (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (limite 5000) (tempo-inicial (get-internal-real-time)))
   "Função negamax com cortes alfabeta"
   (let ((sucessores (funcall funcao-sucessores no jogador)))
     (cond ((or (zerop profundidade))
             (list no (* (cond ((equal jogador (first jogadores)) 1) (t -1)) (funcall funcao-avaliacao no jogador))))
           (t (cond ((null sucessores) (list no most-negative-double-float))
-                   (t (negamax-auxiliar no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao))
+                   (t (negamax-auxiliar no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial))
               )
           )
         )
@@ -54,12 +54,13 @@
 )
 
 ;; Função auxiliar do negamax
-(defun negamax-auxiliar (no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao)
+(defun negamax-auxiliar (no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial &aux (tempo-atual (get-internal-real-time)))
   "Função auxiliar do negamax"
   (cond ((null sucessores) (list no most-negative-double-float))
-        (t (let* ((valor (inverter-sinal-utilidade (negamax (car sucessores) (1- profundidade) (- beta) (- alfa) (trocar-jogador jogador jogadores) jogadores funcao-sucessores funcao-avaliacao))))
+        ((>= (* (/ (- tempo-atual tempo-inicial) internal-time-units-per-second) 1000) limite) (list no most-negative-double-float))
+        (t (let* ((valor (inverter-sinal-utilidade (negamax (car sucessores) (1- profundidade) (- beta) (- alfa) (trocar-jogador jogador jogadores) jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial))))
               (cond ((>= (max alfa (second valor)) beta) valor)
-                    (t (no-max-utilidade (append (list valor) (list (negamax-auxiliar no (cdr sucessores) profundidade (max alfa (second valor)) beta jogador jogadores funcao-sucessores funcao-avaliacao))) jogador))
+                    (t (no-max-utilidade (append (list valor) (list (negamax-auxiliar no (cdr sucessores) profundidade (max alfa (second valor)) beta jogador jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial))) jogador))
               )
             )
         )
