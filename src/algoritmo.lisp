@@ -44,8 +44,8 @@
   "Função negamax com cortes alfabeta"
   (let ((sucessores (funcall funcao-sucessores no jogador)))
     (cond ((or (zerop profundidade))
-            (* (cond ((equal jogador (first jogadores)) 1) (t -1)) (funcall funcao-avaliacao no jogador)))
-          (t (cond ((null sucessores) most-negative-double-float)
+            (list no (* (cond ((equal jogador (first jogadores)) 1) (t -1)) (funcall funcao-avaliacao no jogador))))
+          (t (cond ((null sucessores) (list no most-negative-double-float))
                    (t (negamax-auxiliar no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao))
               )
           )
@@ -56,13 +56,31 @@
 ;; Função auxiliar do negamax
 (defun negamax-auxiliar (no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao)
   "Função auxiliar do negamax"
-  (cond ((null sucessores) most-negative-double-float)
-        (t (let* ((valor (- (negamax (car sucessores) (1- profundidade) (- beta) (- alfa) (trocar-jogador jogador jogadores) jogadores funcao-sucessores funcao-avaliacao))))
-              (cond ((>= (max alfa valor) beta) valor)
-                    (t (max valor (negamax-auxiliar no (cdr sucessores) profundidade (max alfa valor) beta jogador jogadores funcao-sucessores funcao-avaliacao)))
+  (cond ((null sucessores) (list no most-negative-double-float))
+        (t (let* ((valor (inverter-sinal-utilidade (negamax (car sucessores) (1- profundidade) (- beta) (- alfa) (trocar-jogador jogador jogadores) jogadores funcao-sucessores funcao-avaliacao))))
+              (cond ((>= (max alfa (second valor)) beta) valor)
+                    (t (no-max-utilidade (append (list valor) (list (negamax-auxiliar no (cdr sucessores) profundidade (max alfa (second valor)) beta jogador jogadores funcao-sucessores funcao-avaliacao))) jogador))
               )
             )
         )
+  )
+)
+
+;; Função que retorna o nó com a maior utilidade e a sua utilidade
+(defun no-max-utilidade (lista jogador &optional max-util)
+  "Função que retorna o nó com a maior utilidade e a sua utilidade"
+  (cond ((null lista) max-util)
+        ((null max-util) (no-max-utilidade (cdr lista) jogador (car lista)))
+        ((> (second (car lista)) (second max-util)) (no-max-utilidade (cdr lista) jogador (car lista)))
+        (t (no-max-utilidade (cdr lista) jogador max-util))
+  )
+)
+
+;; Função que inverte o sinal da utilidade
+(defun inverter-sinal-utilidade (utilidade)
+  "Função que inverte o sinal da utilidade"
+  (cond ((null utilidade) nil)
+        (t (list (first utilidade) (- (second utilidade))))
   )
 )
 

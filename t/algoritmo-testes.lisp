@@ -177,7 +177,7 @@
     ;; Negamax com cortes alfa-beta
     (verificar-igual
       91
-      (5::negamax (5::no-teste) 3 most-negative-double-float most-positive-double-float 5::*cavalo-branco* (list 5::*cavalo-branco* 5::*cavalo-preto*) '5::sucessores '5::avaliar-no)
+      (second (5::negamax (5::no-teste) 3 most-negative-double-float most-positive-double-float 5::*cavalo-branco* (list 5::*cavalo-branco* 5::*cavalo-preto*) '5::sucessores '5::avaliar-no))
       "negamax-alfabeta"
     )
   )))
