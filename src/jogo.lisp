@@ -6,9 +6,7 @@
 
 ;;; Constantes
 (defvar *cavalo-branco* -1)
-(export '*cavalo-branco*)
 (defvar *cavalo-preto* -2)
-(export '*cavalo-preto*)
 
 ;;; Tabuleiros
 
@@ -28,10 +26,26 @@
     (33 70 84 40 66 38 92 67 98 97)
   )
 )
-(export 'tabuleiro-teste)
 
 ;; Função que retorna um tabuleiro predefinido com os cavalos colocados.
-(defun tabuleiro-jogado ()
+(defun tabuleiro-cavalo-branco ()
+  "Tabuleiro de teste igual ao anterior mas tendo sido colocado o cavalo branco na casa (0,9)"
+  '(
+    (94 25 54 89 21 8 36 14 41 -1) 
+    (78 47 56 23 5 49 13 12 26 60) 
+    (0 27 17 83 34 93 74 52 45 80) 
+    (NIL 9 77 95 55 39 91 73 57 30) 
+    (24 15 22 86 1 11 68 79 76 72) 
+    (81 48 32 2 64 16 50 37 29 71) 
+    (99 51 6 18 53 28 7 63 10 88) 
+    (59 42 46 85 90 75 87 43 20 31) 
+    (3 61 58 44 65 82 19 4 35 62) 
+    (33 70 84 40 66 38 92 67 98 97)
+  )
+)
+
+;; Função que retorna um tabuleiro predefinido com os cavalos colocados.
+(defun tabuleiro-ambos-colocados ()
   "Tabuleiro de teste igual ao anterior mas tendo sido colocado o cavalo branco na casa (0,9) e o cavalo preto na casa (9,8)"
   '(
     (94 25 54 NIL 21 8 36 14 41 -1) 
@@ -46,7 +60,6 @@
     (33 70 84 40 66 38 92 67 -2 97)
   )
 )
-(export 'tabuleiro-jogado)
 
 ;; Função que recebe um tabuleiro e se não tiver o cavalo (branco ou preto) colocado,
 ;; coloca o cavalo na casa com maior valor na linha respetiva 
@@ -55,14 +68,13 @@
   "Coloca o cavalo na casa com maior valor na linha respetiva"
   (cond ((not (numberp cavalo)) (error "O cavalo tem de ser um numero"))
         ((not (or (= cavalo *cavalo-branco*) (= cavalo *cavalo-preto*))) (error "O cavalo tem de ser -1 ou -2"))
-        ((cavalo-colocado-p tabuleiro cavalo) nil)
+        ((cavalo-colocado-p cavalo tabuleiro) nil)
         (t (cond ((= cavalo *cavalo-branco*) (colocar-cavalo-auxiliar tabuleiro cavalo 0 valor-a-remover-se-duplo))
                  ((= cavalo *cavalo-preto*) (colocar-cavalo-auxiliar tabuleiro cavalo (1- (length tabuleiro)) valor-a-remover-se-duplo))
            )
         )
   )
 )
-(export 'colocar-cavalo)
 
 ;; Função auxiliar que recebe um tabuleiro, o cavalo e a linha respetiva e coloca o cavalo na casa com maior valor na linha respetiva.
 (defun colocar-cavalo-auxiliar (tabuleiro cavalo linha-respetiva value-a-remover-se-duplo)
@@ -85,7 +97,6 @@
         (t (cons (1- (- n i)) (lista-numeros n (1+ i))))
   )
 )
-(export 'lista-numeros)
 
 ;; Função que recebe uma lista e muda aleatoriamente os seus números.
 (defun baralhar (lista)
@@ -96,7 +107,6 @@
                             (lambda (num) (= num num-aleatorio)) lista)))))
     )
 )
-(export 'baralhar)
 
 ;; Função que recebe uma lista de números (por default gera uma lista nova) 
 ;; e o tamanhho da linha (por default o valor é 10) e retorna um tabuleiro com esses parâmetros.
@@ -108,7 +118,6 @@
     (t (cons (subseq lista 0 i) (tabuleiro-aleatorio (subseq lista i) i)))
   )
 )
-(export 'tabuleiro-aleatorio)
 
 ;;; Escrita de tabuleiros
 
@@ -126,8 +135,8 @@
             (cond (numero-linha (format saida "~2,'0d " (1+ i))))
             (format saida "|" )
             (mapcar (lambda (cel) (cond 
-              ((eq cel *cavalo-branco*) (format saida " BB "))
-              ((eq cel *cavalo-preto*) (format saida " PP "))
+              ((eq cel *cavalo-branco*) (format saida " CB "))
+              ((eq cel *cavalo-preto*) (format saida " CP "))
               ((numberp cel) (format saida " ~2,'0d " cel))
               (t (format saida " .. "))
             )) (linha i tabuleiro))
@@ -137,7 +146,6 @@
         )
   )
 )
-(export 'escreve-tabuleiro-formatado)
 
 ;;; Seletores
 
@@ -147,7 +155,6 @@
   "Retorna a linha i do tabuleiro"
   (nth i tabuleiro)
 )
-(export 'linha)
 
 ;; Função que recebe dois índices e o tabuleiro e 
 ;; retorna o valor presente nessa célula do tabuleiro.
@@ -158,7 +165,6 @@
         (t (nth j (nth i tabuleiro)))
   )
 )
-(export 'celula)
 
 ;;; Funções auxiliares
 
@@ -169,7 +175,6 @@
         (t (lista-para-numero (reverse (numero-para-lista num))))
   )
 )
-(export 'simetrico)
 
 ;; Função que recebe um número e retorna t se o número for duplo i.e. se for composto por dois algarismos iguais.
 (defun duplop (num)
@@ -182,14 +187,12 @@
     )
   )
 )
-(export 'duplop)
 
 ;; Função que recebe uma linha e retorna o maior número da linha.
 (defun maior-numero-linha (linha-tabuleiro)
   "Retorna o maior número da linha"
   (apply 'max (remove-if (lambda (num) (or (null num) (< num 0))) linha-tabuleiro))
 )
-(export 'maior-numero-linha)
 
 ;; Função que recebe um tabuleiro e retorna o maior número do tabuleiro.
 (defun maior-numero-tabuleiro (tabuleiro)
@@ -203,13 +206,11 @@
         )
   )
 )
-(export 'maior-numero-tabuleiro)
 
 ;; Função que retorna todos os números de um tabuleiro numa lista.
 (defun numeros-tabuleiro (tabuleiro)
   (remove-if (lambda (num) (or (null num) (< num 0))) (juntar-linhas tabuleiro))
 )
-(export 'numeros-tabuleiro)
 
 ;; Função auxiliar que recebe um tabuleiro e retorna uma lista com todas as linhas do tabuleiro juntas.
 (defun juntar-linhas (tabuleiro)
@@ -236,7 +237,6 @@
         (t (lista-contem item (cdr lista)))
   )
 )
-(export 'lista-contem)
 
 ;; Função auxiliar que recebe um número e retorna uma lista com os algarismos do número.
 (defun numero-para-lista (num)
@@ -257,7 +257,6 @@
     )
   )
 )
-(export 'coluna-para-letra)
 
 ;; Função que recebe um índice, uma lista e um valor (por default o valor é NIL) e
 ;; substitui pelo valor pretendido nessa posição.
@@ -278,7 +277,6 @@
         (t (cons (car tabuleiro) (substituir (1- i) j (cdr tabuleiro) valor)))
   )
 )
-(export 'substituir)
 
 ;; Função que recebe o tabuleiro e o valor a procurar e
 ;; retorna a posição (i j) em que se encontra o valor. Caso o valor não se encontre no tabuleiro deverá ser retornado NIL.
@@ -289,7 +287,6 @@
         (t (posicao-valor (cdr tabuleiro) valor (1+ linha-valor)))
   )
 )
-(export 'posicao-valor)
 
 ;; Função que recebe o tabuleiro e devolve a posição (i j) em que se encontra o
 ;; cavalo. Caso o cavalo não se encontre no tabuleiro deverá ser retornado NIL.
@@ -297,17 +294,24 @@
   "Retorna a posicao do cavalo no tabuleiro"
   (posicao-valor tabuleiro cavalo)
 )
-(export 'posicao-cavalo)
 
 ;; Predicao que recebe um tabuleiro e 
 ;; verifica se o cavalo está colocado no tabuleiro.
-(defun cavalo-colocado-p (tabuleiro cavalo)
+(defun cavalo-colocado-p (cavalo tabuleiro)
   "Verifica se o cavalo está colocado no tabuleiro"
   (cond ((posicao-cavalo cavalo tabuleiro) t)
         (t nil)
   )
 )
-(export 'cavalo-colocado-p)
+
+;; Função que recebe um cavalo e retorna o cavalo oposto.
+(defun trocar-cavalo (cavalo)
+  "Troca o cavalo"
+  (cond ((= cavalo *cavalo-branco*) *cavalo-preto*)
+        ((= cavalo *cavalo-preto*) *cavalo-branco*)
+        (t nil)
+  )
+)
 
 ;; Função que recebe o tabuleiro, o valor de destino e o valor a remover-se duplo (por default o maior valor do tabuleiro) e
 ;; retorna o tabuleiro com as regras aplicadas.
@@ -328,7 +332,6 @@
         (t tabuleiro)
   )
 )
-(export 'aplicar-regras)
 
 ;;; Movimentos
 
@@ -343,7 +346,6 @@
           (t nil)
   )
 )
-(export 'movimento-valido-p)
 
 ;; Função auxiliar que recebe a posição de destino e o tabuleiro e
 ;; verifica se a posição de destino é válida.
@@ -370,7 +372,6 @@
     )
   )
 )
-(export 'ameacado-p)
 
 ;; Função que recebe o cavalo e o tabuleiro e 
 ;;retorna uma lista com todas as posições possíveis para o cavalo.
@@ -402,8 +403,6 @@
         )
   )
 )
-(export 'mover-cavalo)
-
 ;;; Operadores
 
 ;; Função que retorna a lista de operadores aplicáveis a um estado.
@@ -411,7 +410,6 @@
   "Retorna a lista de movimentos do cavalo"
   (list 'operador-1 'operador-2 'operador-3 'operador-4 'operador-5 'operador-6 'operador-7 'operador-8)
 )
-(export 'operadores)
 
 ;; Função que movimenta o cavalo 2 casas para baixo e 1 casa para a esquerda.
 (defun operador-1 (cavalo tabuleiro)
@@ -422,7 +420,7 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
-(export 'operador-1)
+
 
 ;; Função que movimenta o cavalo 2 casas para baixo e 1 casa para a direita.
 (defun operador-2 (cavalo tabuleiro)
@@ -433,7 +431,6 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
-(export 'operador-2)
 
 ;; Função que movimenta o cavalo 2 casas para a direita e 1 casa para baixo.
 (defun operador-3 (cavalo tabuleiro)
@@ -444,7 +441,6 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
-(export 'operador-3)
 
 ;; Função que movimenta o cavalo 2 casas para a direita e 1 casa para cima.
 (defun operador-4 (cavalo tabuleiro)
@@ -455,7 +451,6 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
-(export 'operador-4)
 
 ;; Função que movimenta o cavalo 2 casas para cima e 1 casa para a direita.
 (defun operador-5 (cavalo tabuleiro)
@@ -466,7 +461,6 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
-(export 'operador-5)
 
 ;; Função que movimenta o cavalo 2 casas para cima e 1 casa para a esquerda.
 (defun operador-6 (cavalo tabuleiro)
@@ -477,7 +471,6 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
-(export 'operador-6)
 
 ;; Função que movimenta o cavalo 2 casas para a esquerda e 1 casa para cima.
 (defun operador-7 (cavalo tabuleiro)
@@ -488,7 +481,6 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
-(export 'operador-7)
 
 ;; Função que movimenta o cavalo 2 casas para a esquerda e 1 casa para baixo.
 (defun operador-8 (cavalo tabuleiro)
@@ -499,4 +491,63 @@
         (mover-cavalo cavalo destino tabuleiro)
   )
 )
-(export 'operador-8)
+
+;;; Funções relacionadas com o algoritmo de procura
+
+;; Função que recebe um nó e um cavalo e retorna a pontuação desse cavalo.
+(defun no-pontuacao (no cavalo &optional (pontuacao 0))
+  "Função que retorna a pontuação de um nó"
+  (cond ((null (no-pai no)) 0)
+        ((null (no-estado no)) 0)
+        ((null (posicao-cavalo cavalo (no-estado no))) 0)
+        (t (let ((posicao (posicao-cavalo cavalo (no-estado no)))
+                 (posicao-pai (posicao-cavalo cavalo (no-estado (no-pai no)))))
+              (cond ((equal posicao posicao-pai) (no-pontuacao (no-pai no) cavalo pontuacao))
+                    (t (+ pontuacao (celula (first posicao) (second posicao) (no-estado (no-pai no))) (no-pontuacao (no-pai no) cavalo pontuacao)))
+              )
+           )
+        )
+  )
+)
+
+;; Função utilidade que recebe um nó e um cavalo e retorna utilidade desse nó.
+(defun avaliar-no (no cavalo)
+  "Função que avalia um nó"
+  (let ((pontuacao (no-pontuacao no cavalo))
+        (pontuacao-oposto (no-pontuacao no (trocar-cavalo cavalo))))
+    (cond ((= cavalo *cavalo-branco*) (- pontuacao pontuacao-oposto))
+          ((= cavalo *cavalo-preto*) (- pontuacao-oposto pontuacao))
+          (t 0)
+    )
+  )
+)
+
+;; Função que recebe um nó, um cavalo e um operador e retorna o sucessor desse nó com o operador dado como argumento.
+(defun novo-sucessor (no cavalo operador)
+  "Função que retorna o sucessor de um nó com o operador dado como argumento"
+  (let ((estado-gerado (funcall operador cavalo (no-estado no))))
+    (cond
+     ((null estado-gerado) nil)
+     (t (let* ((posicao-destino (posicao-cavalo cavalo estado-gerado))
+               (valor-destino (celula (first posicao-destino) (second posicao-destino) (no-estado no)))
+               (profundidade (1+ (no-profundidade no))))
+               (cria-no estado-gerado profundidade no)
+        )
+     )
+    )
+  )
+)
+
+;; Função que recebe um nó e um cavalo e retorna a lista de sucessores desse nó.
+(defun sucessores (no cavalo)
+  "Função que retorna a lista de sucessores de um nó"
+  (cond ((null no) nil)
+        ((not (cavalo-colocado-p cavalo (no-estado no))) (list (cria-no (colocar-cavalo (no-estado no) cavalo) (1+ (no-profundidade no)) no)))
+        (t (remove-if (lambda (no) (null no)) 
+              (mapcar (lambda (op) (novo-sucessor no cavalo op))
+                (operadores)
+              )
+            )
+        )
+  )
+)
