@@ -67,6 +67,12 @@
   )
 )
 
+;; Função alfa-beta que executa o negamax com cortes alfa-beta e retorna o valor do nó e o tempo de execução
+(defun alfabeta (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (limite 5000) (tempo-inicial (get-internal-real-time)))
+  "Função alfa-beta que executa o negamax com cortes alfa-beta e retorna o valor do nó e o tempo de execução"
+  (append (negamax no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial) (list (/ (- (get-internal-real-time) tempo-inicial) internal-time-units-per-second)))
+)
+
 ;; Função que retorna o nó com a maior utilidade e a sua utilidade
 (defun no-max-utilidade (lista jogador &optional max-util)
   "Função que retorna o nó com a maior utilidade e a sua utilidade"

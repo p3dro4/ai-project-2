@@ -180,6 +180,17 @@
       (second (5::negamax (5::no-teste) 3 most-negative-double-float most-positive-double-float 5::*cavalo-branco* (list 5::*cavalo-branco* 5::*cavalo-preto*) '5::sucessores '5::avaliar-no))
       "negamax-alfabeta"
     )
+
+    ;; Alfa-Beta
+    (verificar-igual
+      91
+      (second (5::alfabeta (5::no-teste) 3 most-negative-double-float most-positive-double-float 5::*cavalo-branco* (list 5::*cavalo-branco* 5::*cavalo-preto*) '5::sucessores '5::avaliar-no))
+      "alfabeta"
+    )
+
+    ;; Alfa-Beta sem jogadas possíveis
+
+    
   )))
   (format t "~%~46,1,1,'~:@< testes bem sucedidos: ~a de ~a ~>~%" 
     (eval (cons '+ (mapcar (lambda (teste) (cond ((eq teste t) 1) (t 0))) lista-testes)))

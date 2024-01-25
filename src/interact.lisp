@@ -61,4 +61,13 @@
   (load (merge-pathnames "t/testes.lisp" (caminho-raiz)) :verbose nil)
 )
 
+;; Função que recebe um estado e retorna o estado resultante da jogada do computador
+(defun jogar (estado tempo)
+  "Função que recebe um estado e retorna o estado resultante da jogada do computador"
+  (let* ((jogador-anterior (jogador-anterior estado))
+         (jogada (alfabeta estado 10 most-negative-double-float most-positive-double-float jogador-anterior (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-no)))
+    (escreve-tabuleiro-formatado (no-estado estado))
+  )
+)
+
 (inicializar)

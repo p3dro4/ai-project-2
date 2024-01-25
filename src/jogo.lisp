@@ -551,3 +551,31 @@
         )
   )
 )
+
+;;; Funções relacionadas com as jogadas
+
+;; Função que retorna o jogador que realizou a jogada anterior.
+(defun jogador-anterior (no)
+  "Função que retorna o jogador anterior"
+  (cond ((null (no-pai no)) nil)
+        (t (let ((posicao-cavalo-branco (posicao-cavalo *cavalo-branco* (no-estado no)))
+                 (posicao-cavalo-preto (posicao-cavalo *cavalo-preto* (no-estado no)))
+                 (posicao-cavalo-branco-pai (posicao-cavalo *cavalo-branco* (no-estado (no-pai no))))
+                 (posicao-cavalo-preto-pai (posicao-cavalo *cavalo-preto* (no-estado (no-pai no)))))
+              (cond ((and (equal posicao-cavalo-branco posicao-cavalo-branco-pai) (not (equal posicao-cavalo-preto posicao-cavalo-preto-pai))) *cavalo-branco*)
+                    ((and (equal posicao-cavalo-preto posicao-cavalo-preto-pai) (not (equal posicao-cavalo-branco posicao-cavalo-branco-pai))) *cavalo-preto*)
+                    (t (jogador-anterior (no-pai no)))
+              )
+            )
+        )
+  )
+)
+
+;; Função que recebe o nó atual, o nó que foi caculado e retorna a jogada a realizar.
+(defun jogada-a-realizar (no-atual no-calculado)
+  "Função que retorna a jogada a realizar"
+  (cond ((or (null no-atual) (null no-calculado)) nil)
+        ((equal no-atual (no-pai no-calculado)) no-calculado)
+        (t (jogada-a-realizar no-atual (no-pai no-calculado)))
+  )
+)

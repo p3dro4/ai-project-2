@@ -973,6 +973,82 @@
       (length (5::sucessores (5::cria-no (5::operador-1 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) 5::*cavalo-branco*))
       "sucessores-cavalo-branco-depois-1-jog"
     )
+  
+    ;; Jogador anterior
+    (verificar-igual
+      5::*cavalo-branco*
+      (5::jogador-anterior (5::no-teste))
+      "jogador-anterior"
+    )
+
+    ;; Jogador anterior vez cedida
+    (verificar-igual
+      5::*cavalo-branco*
+      (5::jogador-anterior (5::cria-no (5::no-estado (5::no-teste)) 3 (5::no-teste)))
+      "jogador-anterior-vez-cedida"
+    )
+
+    ;; Jogada a realizar
+    (verificar-igual
+      '(
+        (
+          (94 25 NIL NIL 21 8 36 14 41 NIL) 
+          (78 47 56 23 5 49 13 12 26 60) 
+          (0 27 17 83 34 93 74 52 -1 80)
+          (NIL 9 77 95 55 39 91 73 57 30) 
+          (24 15 22 86 1 11 68 79 76 72) 
+          (81 48 32 2 64 16 50 37 29 71)
+          (99 51 6 18 53 28 7 63 10 88) 
+          (59 42 46 85 90 75 87 43 20 31) 
+          (3 61 58 44 65 82 19 4 35 62)
+          (33 70 84 40 66 38 92 67 -2 97)
+        )
+        3
+        (
+          (
+            (94 25 54 NIL 21 8 36 14 41 -1) 
+            (78 47 56 23 5 49 13 12 26 60) 
+            (0 27 17 83 34 93 74 52 45 80)
+            (NIL 9 77 95 55 39 91 73 57 30) 
+            (24 15 22 86 1 11 68 79 76 72) 
+            (81 48 32 2 64 16 50 37 29 71)
+            (99 51 6 18 53 28 7 63 10 88) 
+            (59 42 46 85 90 75 87 43 20 31) 
+            (3 61 58 44 65 82 19 4 35 62)
+            (33 70 84 40 66 38 92 67 -2 97)
+          )
+        2
+        (
+          (
+            (94 25 54 89 21 8 36 14 41 -1) 
+            (78 47 56 23 5 49 13 12 26 60) 
+            (0 27 17 83 34 93 74 52 45 80)
+            (NIL 9 77 95 55 39 91 73 57 30) 
+            (24 15 22 86 1 11 68 79 76 72) 
+            (81 48 32 2 64 16 50 37 29 71)
+            (99 51 6 18 53 28 7 63 10 88) 
+            (59 42 46 85 90 75 87 43 20 31) 
+            (3 61 58 44 65 82 19 4 35 62)
+            (33 70 84 40 66 38 92 67 98 97)
+          )
+          1
+          (
+            (
+              (94 25 54 89 21 8 36 14 41 96) 
+              (78 47 56 23 5 49 13 12 26 60) 
+              (0 27 17 83 34 93 74 52 45 80)
+              (69 9 77 95 55 39 91 73 57 30) 
+              (24 15 22 86 1 11 68 79 76 72) 
+              (81 48 32 2 64 16 50 37 29 71)
+              (99 51 6 18 53 28 7 63 10 88) 
+              (59 42 46 85 90 75 87 43 20 31) 
+              (3 61 58 44 65 82 19 4 35 62)
+              (33 70 84 40 66 38 92 67 98 97)
+            )
+            0 NIL))))
+      (5::jogada-a-realizar (5::no-teste) (first (5::alfabeta (5::no-teste) 3 most-negative-double-float most-positive-double-float 5::*cavalo-branco* (list 5::*cavalo-branco* 5::*cavalo-preto*) '5::sucessores '5::avaliar-no)))
+      "jogada-a-realizar"
+    )
   )))
   (format t "~%~46,1,1,'~:@< testes bem sucedidos: ~a de ~a ~>~%" 
     (eval (cons '+ (mapcar (lambda (teste) (cond ((eq teste t) 1) (t 0))) lista-testes)))
