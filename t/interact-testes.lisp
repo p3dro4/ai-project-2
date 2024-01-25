@@ -8,7 +8,12 @@
 (let ((lista-testes
   (list
 
-  ;; ** TESTES **
+  ;; Jogar
+  (verificar-nao-igual
+    nil
+    (first (5::jogar (5::no-teste) 5000))
+    "jogar"
+  )
 
   )))
   (format t "~%~46,1,1,'~:@< testes bem sucedidos: ~a de ~a ~>~%" 

@@ -61,6 +61,8 @@
   (load (merge-pathnames "t/testes.lisp" (caminho-raiz)) :verbose nil)
 )
 
+;;; Funções de jogo
+
 ;; Função que recebe um estado e retorna o estado resultante da jogada do computador
 (defun jogar (estado tempo)
   "Função que recebe um estado e retorna o estado resultante da jogada do computador"
@@ -68,6 +70,39 @@
          (jogada (alfabeta estado 10 most-negative-double-float most-positive-double-float jogador-anterior (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-no))
          (jogada-realizada (jogada-a-realizar estado (first jogada))))
     (list jogada-realizada (second jogada) (third jogada))
+  )
+)
+
+;;; Funções de interação com o utilizador
+
+;; Função que inicia o jogo
+(defun iniciar ()
+  "Função que inicia o jogo"
+  (format t "~46,1,1,'#:@< jogo do cavalo ~>~%")
+  (format t "#~44,1,1,:@<~>#~%")
+  (format t "#~44,1,1,:@<~>#~%")
+  (format t "#~44,1,1,:@<1 - humano VS computador~>#~%")
+  (format t "#~44,1,1,:@<2 - computador VS computador~>#~%")
+  (format t "#~44,1,1,:@<0 - sair da aplicacao~>#~%")
+  (format t "#~44,1,1,:@<~>#~%")
+  (format t "#~44,1,1,:@<~>#~%")
+  (format t "~46,1,1,'#:@<~>~%")
+  (let ((opcao (ler-opcao 2)))
+    (cond ((= opcao 1) (progn (format t "Nao implementado!~%~%") (iniciar)))
+          ((= opcao 2) (progn (format t "Nao implementado!~%~%") (iniciar)))
+          ((= opcao 0) (format t "A sair da aplicacao...~%"))
+    )
+  )
+)
+
+;; Função que lê a opção do utilizador
+(defun ler-opcao (limite &optional (prompt "Escolha > "))
+  "Lê a opção do utilizador"
+  (format t "~a" prompt)
+  (let ((opcao (read)))
+    (cond ((and (integerp opcao) (<= 0 opcao limite)) opcao)
+          (t (progn (format t "opcao invalida!~%") (ler-opcao limite prompt)))
+    )
   )
 )
 
