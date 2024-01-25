@@ -189,7 +189,58 @@
     )
 
     ;; Alfa-Beta sem jogadas possíveis
-
+    (verificar-igual
+      most-negative-double-float
+      (second (5::alfabeta 
+        (5::cria-no 
+          '(
+            (-1 20 44 NIL NIL NIL NIL NIL NIL NIL)
+            (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+            (NIL NIL 30 NIL NIL NIL NIL NIL NIL NIL)
+            (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+            (NIL NIL NIL -2 NIL NIL NIL NIL NIL NIL)
+            (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+            (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+            (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+            (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+            (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+          )
+          2
+          (5::cria-no
+            '(
+              (-1 20 44 NIL NIL NIL NIL NIL NIL NIL)
+              (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+              (NIL NIL 30 NIL NIL NIL NIL NIL NIL NIL)
+              (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+              (NIL NIL NIL 22 NIL NIL NIL NIL NIL NIL)
+              (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+              (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+              (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+              (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+              (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+            ) 
+            1
+            (5::cria-no
+              '(
+                (2 20 44 NIL NIL NIL NIL NIL NIL NIL)
+                (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+                (NIL NIL 30 NIL NIL NIL NIL NIL NIL NIL)
+                (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+                (NIL NIL NIL 22 NIL NIL NIL NIL NIL NIL)
+                (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+                (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+                (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+                (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+                (NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)
+              )
+              0
+              nil
+            )
+          )
+        )
+        3 most-negative-double-float most-positive-double-float 5::*cavalo-branco* (list 5::*cavalo-branco* 5::*cavalo-preto*) '5::sucessores '5::avaliar-no))
+      "alfabeta-sem-jogadas"
+    )
     
   )))
   (format t "~%~46,1,1,'~:@< testes bem sucedidos: ~a de ~a ~>~%" 
