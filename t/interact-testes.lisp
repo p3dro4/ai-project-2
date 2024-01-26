@@ -8,8 +8,6 @@
 (let ((lista-testes
   (list
 
-  ;; Jogar
-
   )))
   (format t "~%~46,1,1,'~:@< testes bem sucedidos: ~a de ~a ~>~%" 
     (eval (cons '+ (mapcar (lambda (teste) (cond ((eq teste t) 1) (t 0))) lista-testes)))

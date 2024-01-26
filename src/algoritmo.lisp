@@ -12,12 +12,6 @@
   (list estado g pai)
 )
 
-;;; Nós
-(defun no-teste ()
-  "Retorna um nó de teste"
-  (cria-no (tabuleiro-ambos-colocados) 2 (cria-no (tabuleiro-cavalo-branco) 1 (cria-no (tabuleiro-teste))))
-)
-
 ;;; Seletores
 
 ;; Retorna o estado do nó dado como argumento

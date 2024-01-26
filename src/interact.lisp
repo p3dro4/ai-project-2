@@ -66,7 +66,7 @@
 ;; Função que recebe um estado e retorna o estado resultante da jogada do computador
 (defun jogar (estado tempo &optional (cache (make-hash-table)))
   "Função que recebe um estado e retorna o estado resultante da jogada do computador"
-  (alfabeta (cria-no estado) 5 most-negative-double-float most-positive-double-float *cavalo-branco* (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-estado cache tempo)
+  (alfabeta (cria-no estado) 15 most-negative-double-float most-positive-double-float *cavalo-branco* (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-estado cache tempo)
 )
 
 ;;; Funções de interação com o utilizador
@@ -87,17 +87,22 @@
   )
 )
 
-;; TODO: Humano vs Computador
+;; Função que inicia o jogo humano vs computador
 (defun humano-vs-computador (cache)
-  (let ((jogador (jogador-a-comecar)))
-    (cond ((null jogador) (iniciar cache))
+  "Função que inicia o jogo humano vs computador"
+  (let ((jogadores (jogador-a-comecar)))
+    (cond ((null jogadores) (iniciar cache))
           (t (progn (format t "~46,1,1,'#:@< jogadores ~>~%#~44,1,1,:@<~>#~%#~44,1,1,:@<~>#~%")
-                    (format t "#~44,1,1,:@<jogador 1 (~a) - cavalo branco~>#~%" (first (first jogador)))
-                    (format t "#~44,1,1,:@<jogador 2 (~a) - cavalo preto~>#~%" (first (second jogador)))
+                    (format t "#~44,1,1,:@<jogador 1 (~a) - cavalo branco~>#~%" (first (first jogadores)))
+                    (format t "#~44,1,1,:@<jogador 2 (~a) - cavalo preto~>#~%" (first (second jogadores)))
                     (format t "#~44,1,1,:@<~>#~%#~44,1,1,:@<~>#~%~46,1,1,'#:@<~>~%")
                     (let ((tempo-limite (tempo-limite-computador))
                           (tabuleiro (tabuleiro-aleatorio)))
-                      (ciclo-de-jogo (cria-no tabuleiro) tempo-limite jogador cache)
+                      (format t "~%~46,1,1,'~:@< inicio do jogo ~>~%")
+                      (format t "~46,1,1,'#:@< tabuleiro inicial ~>~%")
+                      (escreve-tabuleiro-formatado tabuleiro t t t 1)
+                      (format t "~46,1,1,'#:@<~>~%~%")
+                      (ciclo-de-jogo (list tabuleiro (list 0 0)) tempo-limite jogadores cache)
                     )
               )
           )
@@ -107,57 +112,208 @@
 
 ;; TODO: Computador vs Computador
 
-;; TODO: Campeonato
-(defun campeonato (estado tempo jogadores cache)
-  (cond ((equal (first (first jogadores)) "humano") (campeonato (jogada-humano estado tempo cache) tempo (reverse jogadores) cache))
-        (t (let ((jogada (jogar estado tempo cache)))
-            (format t "~46,1,1,'#:@< computador ~>~%")
-            (escreve-tabuleiro-formatado (first jogada) t t t 1)
-            (format t "Utilidade: ~a~%" (second jogada))
-            (format t "Tempo de execucao: ~a~%" (third jogada))
-            (format t "~46,1,1,'#:@<~>~%~%")
+;; Função que representa o ciclo de jogo
+(defun ciclo-de-jogo (estado tempo jogadores cache &optional jogador-passou)
+  "Função que representa o ciclo de jogo"
+  (cond ((equal (first (first jogadores)) "humano")
+          (let ((jogada (jogada-humano estado (first jogadores))))
+            (cond ((and (null jogada) jogador-passou) (calcular-vitoria estado))
+                  ((null jogada) (ciclo-de-jogo estado tempo (reverse jogadores) cache t))
+                  (t (ciclo-de-jogo jogada tempo (reverse jogadores) cache))
+            )
+          )
+        )
+        (t (let ((jogada (jogada-computador estado tempo (first jogadores) cache)))
+             (cond ((and (null jogada) jogador-passou) (calcular-vitoria estado))
+                   ((null jogada) (ciclo-de-jogo estado tempo (reverse jogadores) cache t))
+                   (t (ciclo-de-jogo jogada tempo (reverse jogadores) cache))
+             )
           )
         )
   )
 )
 
-;; TODO: Jogada humano
-(defun jogada-humano (estado tempo cache)
-  (let ((jogador (jogador-proximo estado)))
-    (cond ((not (cavalo-colocado-p jogador (no-estado estado))) 
-            (let* ((novo-estado (cria-no (colocar-cavalo (no-estado estado) jogador) (1+ (no-profundidade estado)) estado)))
+
+;; Função que verifica as condições de vitória
+(defun calcular-vitoria (estado)
+  "Função que verifica as condições de vitória"
+  (let ((pontos-cavalo-branco (first (second estado)))
+        (pontos-cavalo-preto (second (second estado))))
+    (cond ((> pontos-cavalo-branco pontos-cavalo-preto) (vitoria-jogador-1 estado))
+          ((> pontos-cavalo-preto pontos-cavalo-branco) (vitoria-jogador-2 estado))
+          (t (empate estado))
+    )
+  )
+)
+
+;; Função em que o jogador 1 ganha
+(defun vitoria-jogador-1 (estado)
+  "Função em que o jogador 1 ganha"
+  (format t "~46,1,1,'.:@< vitoria - jogador 1 ~>~%")
+  (format t "~46,1,1,'#:@< tabuleiro final ~>~%")
+  (escreve-tabuleiro-formatado (first estado) t t t 1)
+  (format t "~46,1,1,'#:@<~>~%")
+  (format t "~46,1,1,'-:@< PONTOS ~>~%")
+  (format t "~46,1,1,' :@<jogador 1 - ~a pts~>~%" (first (second estado)))
+  (format t "~46,1,1,' :@<jogador 2 - ~a pts~>~%" (second (second estado)))
+  (format t "~46,1,1,'-:@<~>~%")
+  (format t "~46,1,1,'~:@< fim do jogo ~>~%~%")
+
+)
+
+;; Função em que o jogador 2 ganha
+(defun vitoria-jogador-2 (estado)
+  "Função em que o jogador 2 ganha"
+  (format t "~46,1,1,'.:@< vitoria - jogador 2 ~>~%")
+  (format t "~46,1,1,'#:@< tabuleiro final ~>~%")
+  (escreve-tabuleiro-formatado (first estado) t t t 1)
+  (format t "~46,1,1,'#:@<~>~%")
+  (format t "~46,1,1,'-:@< PONTOS ~>~%")
+  (format t "~46,1,1,' :@<jogador 2 - ~a pts~>~%" (second (second estado)))
+  (format t "~46,1,1,' :@<jogador 1 - ~a pts~>~%" (first (second estado)))
+  (format t "~46,1,1,'-:@<~>~%")
+  (format t "~46,1,1,'~:@< fim do jogo ~>~%~%")
+)
+
+;; Função em que há empate
+(defun empate (estado)
+  "Função em que há empate"
+  (format t "~46,1,1,'.:@< empate ~>~%")
+  (format t "~46,1,1,'#:@< tabuleiro final ~>~%")
+  (escreve-tabuleiro-formatado (first estado) t t t 1)
+  (format t "~46,1,1,'#:@<~>~%")
+  (format t "~46,1,1,'-:@< PONTOS ~>~%")
+  (format t "~46,1,1,' :@<jogador 1 - ~a pts~>~%" (first (second estado)))
+  (format t "~46,1,1,' :@<jogador 2 - ~a pts~>~%" (second (second estado)))
+  (format t "~46,1,1,'-:@<~>~%")
+  (format t "~46,1,1,'~:@< fim do jogo ~>~%~%")  
+)
+
+;; Função que representa a jogada do humano
+(defun jogada-humano (estado jogador-atual)
+  (let ((jogador (second jogador-atual)))
+    (cond ((not (cavalo-colocado-p jogador (no-estado estado)))
+            (let* ((tabuleiro-novo (colocar-cavalo (no-estado estado) jogador))
+                   (posicao-destino (posicao-cavalo jogador tabuleiro-novo))
+                   (valor-destino (celula (first posicao-destino) (second posicao-destino) (first estado))))
+              (format t "~46,1,1,'.:@< colocar cavalo - jogador ~a ~>~%" (cond ((equal jogador *cavalo-branco*) "1") ((equal jogador *cavalo-preto*) "2")))
               (format t "~46,1,1,'#:@< humano ~>~%")
-              (escreve-tabuleiro-formatado (no-estado novo-estado) t t t 1)
-              (format t "Utilidade: ~a~%" (avaliar-no novo-estado jogador))
-              (format t "~46,1,1,'#:@<~>~%~%")
-              novo-estado
+              (escreve-tabuleiro-formatado tabuleiro-novo t t t 1)
+              (format t "~%~46,1,1,'#:@<~>~%~%")
+              (cond ((equal jogador *cavalo-branco*) (list tabuleiro-novo (list (+ (first (second estado)) valor-destino) (second (second estado)))))
+                    ((equal jogador *cavalo-preto*) (list tabuleiro-novo (list (first (second estado)) (+ (second (second estado)) valor-destino))))
+              )
             )
           )
-          (t (let ((posicao (jogada-posicao estado jogador)))
-            (format t "Jogada: ~a~%" posicao)
-            )
+          (t (cond ((null (movimentos-possiveis jogador (first estado))) 
+                      (progn (format t "~46,1,1,'.:@< jogada - jogador ~a ~>~%" (cond ((equal jogador *cavalo-branco*) "1") ((equal jogador *cavalo-preto*) "2")))
+                          (format t "~46,1,1,'#:@< humano ~>~%")
+                          (format t "~46,1,1,'#:@< jogador passou ~>~%~%")
+                          nil
+                        )
+                    )
+                   (t (let* ((posicao (jogada-posicao estado jogador))
+                            (tabuleiro-novo (mover-cavalo jogador posicao (first estado)))
+                            (posicao-destino (posicao-cavalo jogador tabuleiro-novo))
+                            (valor-destino (celula (first posicao-destino) (second posicao-destino) (first estado))))
+                        (format t "~46,1,1,'#:@< humano ~>~%")
+                        (escreve-tabuleiro-formatado tabuleiro-novo t t t 1)
+                        (format t "~46,1,1,'#:@<~>~%~%")
+                        (cond ((equal jogador *cavalo-branco*) (list tabuleiro-novo (list (+ (first (second estado)) valor-destino) (second (second estado)))))
+                          ((equal jogador *cavalo-preto*) (list tabuleiro-novo (list (first (second estado)) (+ (second (second estado)) valor-destino))))
+                        )
+                      )
+                   )
+              )
           )
     )
   )
 )
 
-;; TODO: Jogada posiçao
+;; Função que representa a jogada do computador
+(defun jogada-computador (estado tempo jogador-atual cache)
+  "Função que representa a jogada do computador"
+  (let ((jogador (second jogador-atual)))
+    (cond ((not (cavalo-colocado-p jogador (no-estado estado)))
+            (let* ((novo-tabuleiro (colocar-cavalo (no-estado estado) jogador))
+                   (posicao-destino (posicao-cavalo jogador novo-tabuleiro))
+                   (valor-destino (celula (first posicao-destino) (second posicao-destino) (first estado))))
+              (format t "~46,1,1,'.:@< colocar cavalo - jogador ~a ~>~%" (cond ((equal jogador *cavalo-branco*) "1") ((equal jogador *cavalo-preto*) "2")))
+              (format t "~46,1,1,'#:@< computador ~>~%")
+              (escreve-tabuleiro-formatado novo-tabuleiro t t t 1)
+              (format t "~%~46,1,1,'#:@<~>~%~%")
+              (cond ((equal jogador *cavalo-branco*) (list novo-tabuleiro (list (+ (first (second estado)) valor-destino) (second (second estado)))))
+                    ((equal jogador *cavalo-preto*) (list novo-tabuleiro (list (first (second estado)) (+ (second (second estado)) valor-destino))))
+              )
+            )
+          )
+          (t (let* ((jogador-necessita-troca (cond ((equal jogador *cavalo-branco*) nil) (t t)))
+                    (novo-estado (cond (jogador-necessita-troca (trocar-pecas estado)) (t estado)))
+                    (jogada (jogar novo-estado tempo cache))
+                    (estado-final (cond (jogador-necessita-troca (trocar-pecas (first jogada))) (t (first jogada)))))
+                (cond ((null (first jogada)) 
+                        (progn (format t "~46,1,1,'.:@< jogada - jogador ~a ~>~%" (cond ((equal jogador *cavalo-branco*) "1") ((equal jogador *cavalo-preto*) "2")))
+                          (format t "~46,1,1,'#:@< computador ~>~%")
+                          (format t "~46,1,1,'#:@< jogador passou ~>~%~%")
+                          nil
+                        )
+                      )
+                      (t (progn (format t "~46,1,1,'.:@< jogada - jogador ~a ~>~%" (cond ((equal jogador *cavalo-branco*) "1") ((equal jogador *cavalo-preto*) "2")))
+                          (format t "~46,1,1,'#:@< computador ~>~%")
+                          (escreve-tabuleiro-formatado (first estado-final) t t t 1)
+                          (format t "~46,1,1,'#:@<~>~%")
+                          (format t "utilidade: ~a~%" (second jogada))
+                          (format t "tempo de execucao: ~d ms~%~%" (* (third jogada) 1000))
+                          estado-final
+                        )
+                      )
+                )
+              )
+          )
+    )
+  )
+)
+
+;; Função que troca as peças dos jogadores
+(defun trocar-pecas (estado)
+  "Função que troca as peças dos jogadores"
+  (let* ((posicao-cavalo-branco (posicao-cavalo *cavalo-branco* (first estado)))
+         (posicao-cavalo-preto (posicao-cavalo *cavalo-preto* (first estado)))
+         (tabuleiro-branco-trocado (substituir (first posicao-cavalo-preto) (second posicao-cavalo-preto) (first estado) *cavalo-branco*))
+         (tabuleiro-preto-trocado (substituir (first posicao-cavalo-branco) (second posicao-cavalo-branco) tabuleiro-branco-trocado *cavalo-preto*)))
+    (list tabuleiro-preto-trocado (reverse (second estado)))
+  )
+)
+
+;; Função que lê a posição para onde mover o cavalo
 (defun jogada-posicao (no cavalo)
+  "Função que lê a posição para mover onde o cavalo"
   (let ((movimentos (movimentos-possiveis cavalo (no-estado no))))
-    (format t "Jogadas possiveis:~%")
-    (format t "~c~a (~a ~a)" (coluna-para-letra (second (first movimentos))) (first (first movimentos)) (first (first movimentos)) (second (first movimentos)))
-    (mapcar (lambda (mov) (format t ", ~c~a (~a ~a)" (coluna-para-letra (second mov)) (first mov) (first mov) (second mov))) (rest movimentos))
-    (format t "~%")
+    (format t "~46,1,1,'.:@< jogada - jogador ~a ~>~%" (cond ((equal cavalo *cavalo-branco*) "1") ((equal cavalo *cavalo-preto*) "2")))
+    (format t "Jogadas possiveis (linha coluna):~%")
+    (escreve-movimentos-possiveis movimentos)
     (let* ((linha (ler-opcao (length (no-estado no)) "Escolha a linha > " nil))
            (coluna (ler-opcao (length (first (no-estado no))) "Escolha a coluna > ")))
-      (cond ((and (integerp coluna) (integerp linha) (lista-contem (list linha coluna) movimentos)) (list linha coluna))
-            (t (progn (format t "valor invalido!~%") (jogada-posicao no cavalo)))
+      (cond ((and (integerp coluna) (integerp linha) (lista-contem (list (1- linha) (1- coluna)) movimentos)) (list (1- linha) (1- coluna)))
+            (t (progn (format t "valor invalido!~%~%") (jogada-posicao no cavalo)))
       )
     )
   )
 )
 
-;; TODO: Tempo limite do computador
+;; Função que escreve os movimentos possíveis
+(defun escreve-movimentos-possiveis (movimentos &optional (i 0))
+  "Função que escreve os movimentos possíveis"
+  (let ((mov (first movimentos)))
+    (cond ((null mov) nil)
+          ((equal i 4) (progn (format t "~%") (escreve-movimentos-possiveis movimentos 0)))
+          ((equal (length movimentos) 1) (format t "~c~a (~a ~a)~%" (coluna-para-letra (second mov)) (1+ (first mov)) (1+ (first mov)) (1+ (second mov))))
+          (t (progn (format t "~c~a (~a ~a), " (coluna-para-letra (second mov)) (1+ (first mov)) (1+ (first mov)) (1+ (second mov))) (escreve-movimentos-possiveis (rest movimentos) (1+ i))))
+    )
+  )
+)
+
+;; Função que lê o tempo limite do computador
 (defun tempo-limite-computador (&optional (limite-superior 5000) (limite-inferior 1000))
   "Função que lê o tempo limite do computador"
   (format t "Tempo limite computador [~a,~a](ms) > " limite-inferior limite-superior)
@@ -195,6 +351,6 @@
   )
 )
 
-;; TODO: escrever jogadas no log
+;; TODO: Escrever jogadas no log
 
 (inicializar)

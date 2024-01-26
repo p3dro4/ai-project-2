@@ -64,15 +64,17 @@
 ;; Função que recebe um tabuleiro e se não tiver o cavalo (branco ou preto) colocado,
 ;; coloca o cavalo na casa com maior valor na linha respetiva 
 ;; (primeira linha para o cavalo branco e última para o cavalo preto).
-(defun colocar-cavalo (tabuleiro cavalo &optional (valor-a-remover-se-duplo (maior-numero-tabuleiro tabuleiro)))
+(defun colocar-cavalo (tabuleiro cavalo &optional valor-a-remover-se-duplo-inicial)
   "Coloca o cavalo na casa com maior valor na linha respetiva"
-  (cond ((not (numberp cavalo)) (error "O cavalo tem de ser um numero"))
-        ((not (or (= cavalo *cavalo-branco*) (= cavalo *cavalo-preto*))) (error "O cavalo tem de ser -1 ou -2"))
-        ((cavalo-colocado-p cavalo tabuleiro) nil)
-        (t (cond ((= cavalo *cavalo-branco*) (colocar-cavalo-auxiliar tabuleiro cavalo 0 valor-a-remover-se-duplo))
-                 ((= cavalo *cavalo-preto*) (colocar-cavalo-auxiliar tabuleiro cavalo (1- (length tabuleiro)) valor-a-remover-se-duplo))
-           )
-        )
+  (let ((valor-a-remover-se-duplo (cond ((null valor-a-remover-se-duplo-inicial) (maior-numero-tabuleiro tabuleiro)) (t valor-a-remover-se-duplo-inicial))))
+    (cond ((not (numberp cavalo)) (error "O cavalo tem de ser um numero"))
+          ((not (or (= cavalo *cavalo-branco*) (= cavalo *cavalo-preto*))) (error "O cavalo tem de ser -1 ou -2"))
+          ((cavalo-colocado-p cavalo tabuleiro) nil)
+          (t (cond ((= cavalo *cavalo-branco*) (colocar-cavalo-auxiliar tabuleiro cavalo 0 valor-a-remover-se-duplo))
+                  ((= cavalo *cavalo-preto*) (colocar-cavalo-auxiliar tabuleiro cavalo (1- (length tabuleiro)) valor-a-remover-se-duplo))
+            )
+          )
+    )
   )
 )
 
@@ -145,6 +147,15 @@
            )
         )
   )
+)
+
+;; Função que recebe uma posição e escreve-a no ecrã.
+(defun escreve-posicao (posicao &optional (saida t))
+  "Escreve a posicao no ecrã"
+  (cond ((null posicao) nil)
+        ((not (= (length posicao) 2)) (error "A posição não tem 2 elementos"))
+        (t (format saida "~a~a" (coluna-para-letra (second posicao)) (1+ (first posicao))))	
+  ) 
 )
 
 ;;; Seletores
