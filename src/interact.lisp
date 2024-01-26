@@ -81,7 +81,7 @@
   (format t "#~44,1,1,:@<~>#~%#~44,1,1,:@<~>#~%~46,1,1,'#:@<~>~%")
   (let ((opcao (ler-opcao 2)))
     (cond ((= opcao 1) (humano-vs-computador cache))
-          ((= opcao 2) (progn (format t "Nao implementado!~%~%") (iniciar)))
+          ((= opcao 2) (computador-vs-computador cache))
           ((= opcao 0) (format t "A sair da aplicacao...~%"))
     )
   )
@@ -115,7 +115,29 @@
   )
 )
 
-;; TODO: Computador vs Computador
+;; Função que inicia o jogo computador vs computador
+(defun computador-vs-computador (cache)
+  "Função que inicia o jogo computador vs computador"
+  (let ((jogadores (list (list "computador" *cavalo-branco*) (list "computador" *cavalo-preto*))))
+    (format t "~46,1,1,'#:@< jogadores ~>~%#~44,1,1,:@<~>#~%#~44,1,1,:@<~>#~%")
+                    (format t "#~44,1,1,:@<jogador 1 (~a) - cavalo branco~>#~%" (first (first jogadores)))
+                    (format t "#~44,1,1,:@<jogador 2 (~a) - cavalo preto~>#~%" (first (second jogadores)))
+                    (format t "#~44,1,1,:@<~>#~%#~44,1,1,:@<~>#~%~46,1,1,'#:@<~>~%")
+                    (let ((tempo-limite (tempo-limite-computador))
+                          (tabuleiro (tabuleiro-aleatorio)))
+                      (format t "~%~46,1,1,'~:@< inicio do jogo ~>~%")
+                      (format t "~46,1,1,'#:@< tabuleiro inicial ~>~%")
+                      (escreve-tabuleiro-formatado tabuleiro t t t 1)
+                      (format t "~46,1,1,'#:@<~>~%~%")
+                      (ciclo-de-jogo (list tabuleiro (list 0 0)) tempo-limite jogadores cache)
+                      (let ((opcao (ler-opcao 1 "Voltar ao menu principal? [sim(1)/nao(0)] > " nil)))
+                        (cond ((= opcao 1) (iniciar cache))
+                              ((= opcao 0) (format t "A sair da aplicacao...~%"))
+                        )
+                      )
+                    )
+  )
+)
 
 ;; Função que representa o ciclo de jogo
 (defun ciclo-de-jogo (estado tempo jogadores cache &optional jogador-passou)
