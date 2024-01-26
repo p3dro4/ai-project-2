@@ -66,11 +66,7 @@
 ;; Função que recebe um estado e retorna o estado resultante da jogada do computador
 (defun jogar (estado tempo &optional (cache (make-hash-table)))
   "Função que recebe um estado e retorna o estado resultante da jogada do computador"
-  (let* ((jogador (jogador-proximo estado))
-         (jogada (alfabeta estado 10 most-negative-double-float most-positive-double-float jogador (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-no))
-         (jogada-realizada (jogada-a-realizar estado (first jogada))))
-    (list jogada-realizada (second jogada) (third jogada))
-  )
+  (alfabeta (cria-no estado) 5 most-negative-double-float most-positive-double-float *cavalo-branco* (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-estado cache tempo)
 )
 
 ;;; Funções de interação com o utilizador
@@ -111,9 +107,9 @@
 
 ;; TODO: Computador vs Computador
 
-;; TODO: Ciclo de jogo
-(defun ciclo-de-jogo (estado tempo jogadores cache)
-  (cond ((equal (first (first jogadores)) "humano") (ciclo-de-jogo (jogada-humano estado tempo cache) tempo (reverse jogadores) cache))
+;; TODO: Campeonato
+(defun campeonato (estado tempo jogadores cache)
+  (cond ((equal (first (first jogadores)) "humano") (campeonato (jogada-humano estado tempo cache) tempo (reverse jogadores) cache))
         (t (let ((jogada (jogar estado tempo cache)))
             (format t "~46,1,1,'#:@< computador ~>~%")
             (escreve-tabuleiro-formatado (first jogada) t t t 1)

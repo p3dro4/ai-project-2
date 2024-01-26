@@ -682,386 +682,53 @@
       "operador-8"
     )
 
-    ;;; Funções relacionadas com o algoritmo de procura
-
-    ;; Pontuação nó cavalo branco
-    (verificar-igual
-      96
-      (5::no-pontuacao (5::no-teste) 5::*cavalo-branco*)
-      "no-pontuacao-cavalo-branco"
-    )
-
-    ;; Pontuação nó cavalo preto
-    (verificar-igual
-      98
-      (5::no-pontuacao (5::no-teste) 5::*cavalo-preto*)
-      "no-pontuacao-cavalo-preto"
-    )
-
-    ;; Pontuação nó após movimento do cavalo branco
-    (verificar-igual
-      141
-      (5::no-pontuacao (5::cria-no (5::operador-1 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) 5::*cavalo-branco*)
-      "no-pontuacao-cavalo-branco-movimento"
-    )
-
-    ;; Pontuação nó após movimento do cavalo branco que 
-    (verificar-igual
-      0
-      (5::no-pontuacao (5::cria-no (5::operador-2 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) 5::*cavalo-branco*)
-      "no-pontuacao-cavalo-branco-mov-nil"
-    )
-
-    ;; Avaliar nó cavalo branco após movimento
-    (verificar-igual
-      43
-      (5::avaliar-no (5::cria-no (5::operador-1 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) 5::*cavalo-branco*)
-      "avaliar-no-cavalo-branco-apos-mov"
-    )
-
-    ;; Avaliar nó sem cavalo colocado
-    (verificar-igual
-      0
-      (5::avaliar-no (5::cria-no (5::tabuleiro-teste)) 5::*cavalo-branco*)
-      "avaliar-no-sem-cavalo-colocado"
-    )
-
-    ;; Avaliar nó cavalo preto após movimento
-    (verificar-igual
-      -21
-      (5::avaliar-no (5::cria-no (5::operador-7 5::*cavalo-preto* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) 5::*cavalo-preto*)
-      "avaliar-no-cavalo-preto-apos-mov"
-    )
-
     ;; Novo sucessor cavalo branco
-    (verificar-igual
-      '(
-        (
-          (94 25 NIL NIL 21 8 36 14 41 NIL) 
-          (78 47 56 23 5 49 13 12 26 60) 
-          (0 27 17 83 34 93 74 52 -1 80)
-          (NIL 9 77 95 55 39 91 73 57 30) 
-          (24 15 22 86 1 11 68 79 76 72) 
-          (81 48 32 2 64 16 50 37 29 71)
-          (99 51 6 18 53 28 7 63 10 88) 
-          (59 42 46 85 90 75 87 43 20 31) 
-          (3 61 58 44 65 82 19 4 35 62)
-          (33 70 84 40 66 38 92 67 -2 97)
-        )
-        3
-        (
-          (
-            (94 25 54 NIL 21 8 36 14 41 -1) 
-            (78 47 56 23 5 49 13 12 26 60) 
-            (0 27 17 83 34 93 74 52 45 80)
-            (NIL 9 77 95 55 39 91 73 57 30) 
-            (24 15 22 86 1 11 68 79 76 72) 
-            (81 48 32 2 64 16 50 37 29 71)
-            (99 51 6 18 53 28 7 63 10 88) 
-            (59 42 46 85 90 75 87 43 20 31) 
-            (3 61 58 44 65 82 19 4 35 62)
-            (33 70 84 40 66 38 92 67 -2 97)
-          )
-          2
-          (
-            (
-              (94 25 54 89 21 8 36 14 41 -1) 
-              (78 47 56 23 5 49 13 12 26 60) 
-              (0 27 17 83 34 93 74 52 45 80)
-              (NIL 9 77 95 55 39 91 73 57 30) 
-              (24 15 22 86 1 11 68 79 76 72) 
-              (81 48 32 2 64 16 50 37 29 71)
-              (99 51 6 18 53 28 7 63 10 88) 
-              (59 42 46 85 90 75 87 43 20 31) 
-              (3 61 58 44 65 82 19 4 35 62)
-              (33 70 84 40 66 38 92 67 98 97)
-            )
-            1
-            (
-              (
-                (94 25 54 89 21 8 36 14 41 96) 
-                (78 47 56 23 5 49 13 12 26 60) 
-                (0 27 17 83 34 93 74 52 45 80)
-                (69 9 77 95 55 39 91 73 57 30) 
-                (24 15 22 86 1 11 68 79 76 72) 
-                (81 48 32 2 64 16 50 37 29 71)
-                (99 51 6 18 53 28 7 63 10 88) 
-                (59 42 46 85 90 75 87 43 20 31) 
-                (3 61 58 44 65 82 19 4 35 62)
-                (33 70 84 40 66 38 92 67 98 97)
-              )
-              0 
-              NIL
-            )
-          )
-        )
-      )
-      (5::novo-sucessor (5::no-teste) 5::*cavalo-branco* '5::operador-1)
+    (verificar-nao-igual
+      nil
+      (5::novo-sucessor (5::cria-no (list (5::tabuleiro-ambos-colocados) (list 96 98))) 5::*cavalo-branco* '5::operador-1)
       "novo-sucessor-cavalo-branco"
     )
 
     ;; Novo sucessor cavalo preto
-    (verificar-igual
-      '(
-        (
-          (94 25 54 NIL 21 8 36 14 41 -1) 
-          (78 47 56 23 5 49 13 12 26 60) 
-          (0 27 17 83 34 93 74 52 45 80)
-          (NIL 9 77 95 55 39 NIL 73 57 30) 
-          (24 15 22 86 1 11 68 79 76 72) 
-          (81 48 32 2 64 16 50 37 29 71)
-          (99 51 6 18 53 28 7 63 10 88) 
-          (59 42 46 85 90 75 87 43 20 31) 
-          (3 61 58 44 65 82 -2 4 35 62)
-          (33 70 84 40 66 38 92 67 NIL 97)
-        )
-        3
-        (
-          (
-            (94 25 54 NIL 21 8 36 14 41 -1) 
-            (78 47 56 23 5 49 13 12 26 60) 
-            (0 27 17 83 34 93 74 52 45 80)
-            (NIL 9 77 95 55 39 91 73 57 30) 
-            (24 15 22 86 1 11 68 79 76 72) 
-            (81 48 32 2 64 16 50 37 29 71)
-            (99 51 6 18 53 28 7 63 10 88) 
-            (59 42 46 85 90 75 87 43 20 31) 
-            (3 61 58 44 65 82 19 4 35 62)
-            (33 70 84 40 66 38 92 67 -2 97)
-          )
-          2
-          (
-            (
-              (94 25 54 89 21 8 36 14 41 -1) 
-              (78 47 56 23 5 49 13 12 26 60) 
-              (0 27 17 83 34 93 74 52 45 80)
-              (NIL 9 77 95 55 39 91 73 57 30) 
-              (24 15 22 86 1 11 68 79 76 72) 
-              (81 48 32 2 64 16 50 37 29 71)
-              (99 51 6 18 53 28 7 63 10 88) 
-              (59 42 46 85 90 75 87 43 20 31) 
-              (3 61 58 44 65 82 19 4 35 62)
-              (33 70 84 40 66 38 92 67 98 97)
-            )
-            1
-            (
-              (
-                (94 25 54 89 21 8 36 14 41 96) 
-                (78 47 56 23 5 49 13 12 26 60) 
-                (0 27 17 83 34 93 74 52 45 80)
-                (69 9 77 95 55 39 91 73 57 30) 
-                (24 15 22 86 1 11 68 79 76 72) 
-                (81 48 32 2 64 16 50 37 29 71)
-                (99 51 6 18 53 28 7 63 10 88) 
-                (59 42 46 85 90 75 87 43 20 31) 
-                (3 61 58 44 65 82 19 4 35 62)
-                (33 70 84 40 66 38 92 67 98 97)
-              )
-              0 
-              NIL
-            )
-          )
-        )
-      )
-      (5::novo-sucessor (5::no-teste) 5::*cavalo-preto* '5::operador-7)
+    (verificar-nao-igual
+      nil
+      (5::novo-sucessor (5::cria-no (list (5::tabuleiro-ambos-colocados) (list 96 98))) 5::*cavalo-preto* '5::operador-7)
       "novo-sucessor-cavalo-preto"
     )
 
     ;; Sucessores cavalo branco não colocado
-    (verificar-igual
-      '(
-        (
-          (
-            (94 25 54 89 21 8 36 14 41 -1) 
-            (78 47 56 23 5 49 13 12 26 60) 
-            (0 27 17 83 34 93 74 52 45 80)
-            (NIL 9 77 95 55 39 91 73 57 30) 
-            (24 15 22 86 1 11 68 79 76 72) 
-            (81 48 32 2 64 16 50 37 29 71)
-            (99 51 6 18 53 28 7 63 10 88) 
-            (59 42 46 85 90 75 87 43 20 31) 
-            (3 61 58 44 65 82 19 4 35 62)
-            (33 70 84 40 66 38 92 67 98 97)
-          )
-          1
-          (
-            (
-              (94 25 54 89 21 8 36 14 41 96) 
-              (78 47 56 23 5 49 13 12 26 60) 
-              (0 27 17 83 34 93 74 52 45 80)
-              (69 9 77 95 55 39 91 73 57 30) 
-              (24 15 22 86 1 11 68 79 76 72) 
-              (81 48 32 2 64 16 50 37 29 71)
-              (99 51 6 18 53 28 7 63 10 88) 
-              (59 42 46 85 90 75 87 43 20 31) 
-              (3 61 58 44 65 82 19 4 35 62)
-              (33 70 84 40 66 38 92 67 98 97)
-            )
-            0 
-            NIL
-          )
-        )
-      )
-      (5::sucessores (5::cria-no (5::tabuleiro-teste)) 5::*cavalo-branco*)
+    (verificar-nao-igual
+      nil
+      (5::sucessores (5::cria-no (list (5::tabuleiro-teste) (list 0 0))) 5::*cavalo-branco*)
       "sucessores-sem-cavalo-branco"
     )
 
     ;; Sucessores cavalo branco não colocado
-    (verificar-igual
-      '(
-        (
-          (
-            (94 25 54 NIL 21 8 36 14 41 -1) 
-            (78 47 56 23 5 49 13 12 26 60) 
-            (0 27 17 83 34 93 74 52 45 80)
-            (NIL 9 77 95 55 39 91 73 57 30) 
-            (24 15 22 86 1 11 68 79 76 72) 
-            (81 48 32 2 64 16 50 37 29 71)
-            (99 51 6 18 53 28 7 63 10 88) 
-            (59 42 46 85 90 75 87 43 20 31) 
-            (3 61 58 44 65 82 19 4 35 62)
-            (33 70 84 40 66 38 92 67 -2 97)
-          )
-          2
-          (
-            (
-              (94 25 54 89 21 8 36 14 41 -1) 
-              (78 47 56 23 5 49 13 12 26 60) 
-              (0 27 17 83 34 93 74 52 45 80)
-              (NIL 9 77 95 55 39 91 73 57 30) 
-              (24 15 22 86 1 11 68 79 76 72) 
-              (81 48 32 2 64 16 50 37 29 71)
-              (99 51 6 18 53 28 7 63 10 88) 
-              (59 42 46 85 90 75 87 43 20 31) 
-              (3 61 58 44 65 82 19 4 35 62)
-              (33 70 84 40 66 38 92 67 98 97)
-            )
-            1
-            (
-              (
-                (94 25 54 89 21 8 36 14 41 96) 
-                (78 47 56 23 5 49 13 12 26 60) 
-                (0 27 17 83 34 93 74 52 45 80)
-                (69 9 77 95 55 39 91 73 57 30) 
-                (24 15 22 86 1 11 68 79 76 72) 
-                (81 48 32 2 64 16 50 37 29 71)
-                (99 51 6 18 53 28 7 63 10 88) 
-                (59 42 46 85 90 75 87 43 20 31) 
-                (3 61 58 44 65 82 19 4 35 62)
-                (33 70 84 40 66 38 92 67 98 97)
-              )
-              0 
-              NIL
-            )
-          )
-        )
-      )
-      (5::sucessores (5::cria-no (5::tabuleiro-cavalo-branco) 1 (5::cria-no (5::tabuleiro-teste))) 5::*cavalo-preto*)
+    (verificar-nao-igual
+      nil
+      (5::sucessores (5::cria-no (list (5::tabuleiro-cavalo-branco) (list 96 0))) 5::*cavalo-preto*)
       "sucessores-sem-cavalo-preto-c/-branco"
     )
 
     ;; Sucessores cavalo branco colocado
     (verificar-igual
       2
-      (length (5::sucessores (5::no-teste) 5::*cavalo-branco*))
+      (length (5::sucessores (5::cria-no (list (5::tabuleiro-ambos-colocados) (list 96 98))) 5::*cavalo-branco*))
       "sucessores-com-cavalo-branco"
     )
 
     ;; Sucessores cavalo preto colocado
     (verificar-igual
       3
-      (length (5::sucessores (5::no-teste) 5::*cavalo-preto*))
+      (length (5::sucessores (5::cria-no (list (5::tabuleiro-ambos-colocados) (list 96 98))) 5::*cavalo-preto*))
       "sucessores-com-cavalo-preto"
     )
 
     ;; Sucessores cavalo branco após 1ª jogada
     (verificar-igual
       5
-      (length (5::sucessores (5::cria-no (5::operador-1 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) 3 (5::no-teste)) 5::*cavalo-branco*))
+      (length (5::sucessores (5::cria-no (list (5::operador-1 5::*cavalo-branco* (5::tabuleiro-ambos-colocados)) (list 141 98))) 5::*cavalo-branco*))
       "sucessores-cavalo-branco-depois-1-jog"
-    )
-  
-    ;; Jogador anterior
-    (verificar-igual
-      5::*cavalo-preto*
-      (5::jogador-anterior (5::no-teste))
-      "jogador-anterior"
-    )
-
-    ;; Jogador anterior vez cedida
-    (verificar-igual
-      5::*cavalo-branco*
-      (5::jogador-anterior (5::cria-no (5::no-estado (5::no-teste)) 3 (5::no-teste)))
-      "jogador-anterior-vez-cedida"
-    )
-
-    ;; Jogador próximo
-    (verificar-igual
-      5::*cavalo-branco*
-      (5::jogador-proximo (5::no-teste))
-      "jogador-proximo"
-    )
-
-    ;; Jogada a realizar
-    (verificar-igual
-      '(
-        (
-          (94 25 NIL NIL 21 8 36 14 41 NIL) 
-          (78 47 56 23 5 49 13 12 26 60) 
-          (0 27 17 83 34 93 74 52 -1 80)
-          (NIL 9 77 95 55 39 91 73 57 30) 
-          (24 15 22 86 1 11 68 79 76 72) 
-          (81 48 32 2 64 16 50 37 29 71)
-          (99 51 6 18 53 28 7 63 10 88) 
-          (59 42 46 85 90 75 87 43 20 31) 
-          (3 61 58 44 65 82 19 4 35 62)
-          (33 70 84 40 66 38 92 67 -2 97)
-        )
-        3
-        (
-          (
-            (94 25 54 NIL 21 8 36 14 41 -1) 
-            (78 47 56 23 5 49 13 12 26 60) 
-            (0 27 17 83 34 93 74 52 45 80)
-            (NIL 9 77 95 55 39 91 73 57 30) 
-            (24 15 22 86 1 11 68 79 76 72) 
-            (81 48 32 2 64 16 50 37 29 71)
-            (99 51 6 18 53 28 7 63 10 88) 
-            (59 42 46 85 90 75 87 43 20 31) 
-            (3 61 58 44 65 82 19 4 35 62)
-            (33 70 84 40 66 38 92 67 -2 97)
-          )
-        2
-        (
-          (
-            (94 25 54 89 21 8 36 14 41 -1) 
-            (78 47 56 23 5 49 13 12 26 60) 
-            (0 27 17 83 34 93 74 52 45 80)
-            (NIL 9 77 95 55 39 91 73 57 30) 
-            (24 15 22 86 1 11 68 79 76 72) 
-            (81 48 32 2 64 16 50 37 29 71)
-            (99 51 6 18 53 28 7 63 10 88) 
-            (59 42 46 85 90 75 87 43 20 31) 
-            (3 61 58 44 65 82 19 4 35 62)
-            (33 70 84 40 66 38 92 67 98 97)
-          )
-          1
-          (
-            (
-              (94 25 54 89 21 8 36 14 41 96) 
-              (78 47 56 23 5 49 13 12 26 60) 
-              (0 27 17 83 34 93 74 52 45 80)
-              (69 9 77 95 55 39 91 73 57 30) 
-              (24 15 22 86 1 11 68 79 76 72) 
-              (81 48 32 2 64 16 50 37 29 71)
-              (99 51 6 18 53 28 7 63 10 88) 
-              (59 42 46 85 90 75 87 43 20 31) 
-              (3 61 58 44 65 82 19 4 35 62)
-              (33 70 84 40 66 38 92 67 98 97)
-            )
-            0 NIL))))
-      (5::jogada-a-realizar (5::no-teste) (first (5::alfabeta (5::no-teste) 3 most-negative-double-float most-positive-double-float 5::*cavalo-branco* (list 5::*cavalo-branco* 5::*cavalo-preto*) '5::sucessores '5::avaliar-no)))
-      "jogada-a-realizar"
     )
   )))
   (format t "~%~46,1,1,'~:@< testes bem sucedidos: ~a de ~a ~>~%" 

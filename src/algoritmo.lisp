@@ -41,13 +41,13 @@
 ;; Função negamax com cortes alfabeta que recebe um nó, uma profundidade, um alfa, um beta, um jogador, uma lista de jogadores, uma função de sucessores e uma função de avaliação 
 ;; e retorna o valor do nó
 ; TODO: Adidiconar a contagem de nós gerados, expandidos e os cortes realizados
-(defun negamax (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (limite 5000) (tempo-inicial (get-internal-real-time)))
+(defun negamax (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (cache (make-hash-table)) (limite 5000) (folga 50) (tempo-inicial (get-internal-real-time)))
   "Função negamax com cortes alfabeta"
   (let ((sucessores (funcall funcao-sucessores no jogador)))
     (cond ((or (zerop profundidade))
-            (list no (* (cond ((equal jogador (first jogadores)) 1) (t -1)) (funcall funcao-avaliacao no jogador))))
-          (t (cond ((null sucessores) (list no most-negative-double-float))
-                   (t (negamax-auxiliar no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial))
+            (list no (* (cond ((equal jogador (first jogadores)) 1) (t -1)) (funcall funcao-avaliacao (no-estado no) jogador))))
+          (t (cond ((null sucessores) nil)
+                   (t (negamax-auxiliar no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))
               )
           )
         )
@@ -55,13 +55,13 @@
 )
 
 ;; Função auxiliar do negamax
-(defun negamax-auxiliar (no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial &aux (tempo-atual (get-internal-real-time)))
+(defun negamax-auxiliar (no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial &aux (tempo-atual (get-internal-real-time)))
   "Função auxiliar do negamax"
-  (cond ((null sucessores) (list no most-negative-double-float))
-        ((>= (* (/ (- tempo-atual tempo-inicial) internal-time-units-per-second) 1000) limite) (list no most-negative-double-float))
-        (t (let* ((valor (inverter-sinal-utilidade (negamax (car sucessores) (1- profundidade) (- beta) (- alfa) (trocar-jogador jogador jogadores) jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial))))
-              (cond ((>= (max alfa (second valor)) beta) valor)
-                    (t (no-max-utilidade (append (list valor) (list (negamax-auxiliar no (cdr sucessores) profundidade (max alfa (second valor)) beta jogador jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial))) jogador))
+  (cond ((null sucessores) nil)
+        ((>= (* (/ (- tempo-atual tempo-inicial) internal-time-units-per-second) 1000) (- limite folga)) nil)
+        (t (let* ((valor (inverter-sinal-utilidade (negamax (car sucessores) (1- profundidade) (- beta) (- alfa) (trocar-jogador jogador jogadores) jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))))
+                 (cond ((>= (max alfa (cond ((null (second valor)) most-negative-double-float) (t (second valor)))) beta) nil)
+                    (t (no-max-utilidade (append (list valor) (list (negamax-auxiliar no (cdr sucessores) profundidade (max alfa (cond ((null (second valor)) most-negative-double-float) (t (second valor)))) beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))) jogador))
               )
             )
         )
@@ -69,15 +69,19 @@
 )
 
 ;; Função alfa-beta que executa o negamax com cortes alfa-beta e retorna o valor do nó e o tempo de execução
-(defun alfabeta (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (limite 5000) (tempo-inicial (get-internal-real-time)))
+(defun alfabeta (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (cache (make-hash-table)) (limite 5000) (folga 10) (tempo-inicial (get-internal-real-time)))
   "Função alfa-beta que executa o negamax com cortes alfa-beta e retorna o valor do nó e o tempo de execução"
-  (append (negamax no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao limite tempo-inicial) (list (/ (- (get-internal-real-time) tempo-inicial) internal-time-units-per-second)))
+  (let* ((jogada-calculada (negamax no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))
+          (jogada (jogada-a-realizar no (first jogada-calculada))))
+    (list (no-estado jogada) (second jogada-calculada) (/ (- (get-internal-real-time) tempo-inicial) internal-time-units-per-second))
+  )
 )
 
 ;; Função que retorna o nó com a maior utilidade e a sua utilidade
 (defun no-max-utilidade (lista jogador &optional max-util)
   "Função que retorna o nó com a maior utilidade e a sua utilidade"
-  (cond ((null lista) max-util)
+    (cond ((null lista) max-util)
+        ((null (car lista)) (no-max-utilidade (cdr lista) jogador max-util))
         ((null max-util) (no-max-utilidade (cdr lista) jogador (car lista)))
         ((> (second (car lista)) (second max-util)) (no-max-utilidade (cdr lista) jogador (car lista)))
         (t (no-max-utilidade (cdr lista) jogador max-util))
@@ -97,5 +101,14 @@
   "Função que altera o jogador atual"
   (cond ((equal jogador-atual (first jogadores)) (second jogadores))
         ((equal jogador-atual (second jogadores)) (first jogadores))
+  )
+)
+
+;; Função que recebe o nó atual, o nó que foi caculado e retorna a jogada a realizar.
+(defun jogada-a-realizar (no-atual no-calculado)
+  "Função que retorna a jogada a realizar"
+  (cond ((or (null no-atual) (null no-calculado)) nil)
+        ((equal no-atual (no-pai no-calculado)) no-calculado)
+        (t (jogada-a-realizar no-atual (no-pai no-calculado)))
   )
 )

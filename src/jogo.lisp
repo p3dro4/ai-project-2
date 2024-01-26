@@ -503,29 +503,13 @@
 
 ;;; Funções relacionadas com o algoritmo de procura
 
-;; Função que recebe um nó e um cavalo e retorna a pontuação desse cavalo.
-(defun no-pontuacao (no cavalo &optional (pontuacao 0))
-  "Função que retorna a pontuação de um nó"
-  (cond ((null (no-pai no)) 0)
-        ((null (no-estado no)) 0)
-        ((null (posicao-cavalo cavalo (no-estado no))) 0)
-        (t (let ((posicao (posicao-cavalo cavalo (no-estado no)))
-                 (posicao-pai (posicao-cavalo cavalo (no-estado (no-pai no)))))
-              (cond ((equal posicao posicao-pai) (no-pontuacao (no-pai no) cavalo pontuacao))
-                    (t (+ pontuacao (celula (first posicao) (second posicao) (no-estado (no-pai no))) (no-pontuacao (no-pai no) cavalo pontuacao)))
-              )
-           )
-        )
-  )
-)
-
 ;; Função utilidade que recebe um nó e um cavalo e retorna utilidade desse nó.
-(defun avaliar-no (no cavalo)
+(defun avaliar-estado (estado cavalo)
   "Função que avalia um nó"
-  (let ((pontuacao (no-pontuacao no cavalo))
-        (pontuacao-oposto (no-pontuacao no (trocar-cavalo cavalo))))
-    (cond ((= cavalo *cavalo-branco*) (- pontuacao pontuacao-oposto))
-          ((= cavalo *cavalo-preto*) (- pontuacao-oposto pontuacao))
+  (let ((pontuacao-cavalo-branco (first (second estado)))
+        (pontuacao-cavalo-preto (second (second estado))))
+    (cond ((= cavalo *cavalo-branco*) (- pontuacao-cavalo-branco pontuacao-cavalo-preto))
+          ((= cavalo *cavalo-preto*) (- pontuacao-cavalo-preto pontuacao-cavalo-branco))
           (t 0)
     )
   )
@@ -534,13 +518,17 @@
 ;; Função que recebe um nó, um cavalo e um operador e retorna o sucessor desse nó com o operador dado como argumento.
 (defun novo-sucessor (no cavalo operador)
   "Função que retorna o sucessor de um nó com o operador dado como argumento"
-  (let ((estado-gerado (funcall operador cavalo (no-estado no))))
+  (let* ((estado (no-estado no))
+         (estado-gerado (funcall operador cavalo (first estado))))
     (cond
      ((null estado-gerado) nil)
      (t (let* ((posicao-destino (posicao-cavalo cavalo estado-gerado))
-               (valor-destino (celula (first posicao-destino) (second posicao-destino) (no-estado no)))
-               (profundidade (1+ (no-profundidade no))))
-               (cria-no estado-gerado profundidade no)
+               (valor-destino (celula (first posicao-destino) (second posicao-destino) (first estado))))
+          (list (list estado-gerado (cond ((= cavalo *cavalo-branco*) (list (+ (first (second estado)) valor-destino) (second (second estado))))
+                                         ((= cavalo *cavalo-preto*) (list (first (second estado)) (+ (second (second estado)) valor-destino)))))
+          (1+ (no-profundidade no))
+          no
+          )
         )
      )
     )
@@ -550,53 +538,26 @@
 ;; Função que recebe um nó e um cavalo e retorna a lista de sucessores desse nó.
 (defun sucessores (no cavalo)
   "Função que retorna a lista de sucessores de um nó"
-  (cond ((null no) nil)
-        ((not (cavalo-colocado-p cavalo (no-estado no))) (list (cria-no (colocar-cavalo (no-estado no) cavalo) (1+ (no-profundidade no)) no)))
-        (t (remove-if (lambda (no) (null no)) 
-              (mapcar (lambda (op) (novo-sucessor no cavalo op))
-                (operadores)
+  (let ((estado (no-estado no)))
+    (cond ((null estado) nil)
+          ((not (cavalo-colocado-p cavalo (first estado))) 
+            (let* ((estado-gerado (colocar-cavalo (first estado) cavalo))
+                   (posicao-destino (posicao-cavalo cavalo estado-gerado))
+                   (valor-destino (celula (first posicao-destino) (second posicao-destino) (first estado))))
+              (list (list (list estado-gerado (cond ((= cavalo *cavalo-branco*) (list (+ (first (second estado)) valor-destino) (second (second estado))))
+                                                    ((= cavalo *cavalo-preto*) (list (first (second estado)) (+ (second (second estado)) valor-destino)))))
+                      (1+ (no-profundidade no))
+                      no
+                    )
               )
             )
-        )
-  )
-)
-
-;;; Funções relacionadas com as jogadas
-
-;; Função que retorna o jogador que realizou a jogada anterior.
-(defun jogador-anterior (no)
-  "Função que retorna o jogador anterior"
-  (cond ((null (no-pai no)) nil)
-        (t (let ((posicao-cavalo-branco (posicao-cavalo *cavalo-branco* (no-estado no)))
-                 (posicao-cavalo-preto (posicao-cavalo *cavalo-preto* (no-estado no)))
-                 (posicao-cavalo-branco-pai (posicao-cavalo *cavalo-branco* (no-estado (no-pai no))))
-                 (posicao-cavalo-preto-pai (posicao-cavalo *cavalo-preto* (no-estado (no-pai no)))))
-              (cond ((null posicao-cavalo-branco-pai) *cavalo-branco*)
-                    ((null posicao-cavalo-preto-pai) *cavalo-preto*)
-                    ((and (equal posicao-cavalo-branco posicao-cavalo-branco-pai) (not (equal posicao-cavalo-preto posicao-cavalo-preto-pai))) *cavalo-branco*)
-                    ((and (equal posicao-cavalo-preto posicao-cavalo-preto-pai) (not (equal posicao-cavalo-branco posicao-cavalo-branco-pai))) *cavalo-preto*)
-                    ((equal posicao-cavalo-branco posicao-cavalo-branco-pai) *cavalo-branco*)
-                    ((equal posicao-cavalo-preto posicao-cavalo-preto-pai) *cavalo-preto*)
-                    (t (jogador-anterior (no-pai no)))
+          )
+          (t (remove-if (lambda (no) (null no)) 
+                (mapcar (lambda (op) (novo-sucessor no cavalo op))
+                  (operadores)
+                )
               )
-            )
-        )
-  )
-)
-
-;; Função que retorna o jogador que vai realizar a próxima jogada.
-(defun jogador-proximo (no)
-  "Função que retorna o jogador que vai realizar a próxima jogada"
-  (cond ((equal (jogador-anterior no) *cavalo-branco*) *cavalo-preto*) 
-        (t *cavalo-branco*)
-  )
-)
-
-;; Função que recebe o nó atual, o nó que foi caculado e retorna a jogada a realizar.
-(defun jogada-a-realizar (no-atual no-calculado)
-  "Função que retorna a jogada a realizar"
-  (cond ((or (null no-atual) (null no-calculado)) nil)
-        ((equal no-atual (no-pai no-calculado)) no-calculado)
-        (t (jogada-a-realizar no-atual (no-pai no-calculado)))
+          )
+    )
   )
 )
