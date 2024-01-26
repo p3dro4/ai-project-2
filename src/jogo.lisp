@@ -508,9 +508,10 @@
   "Função que avalia um nó"
   (let ((pontuacao-cavalo-branco (first (second estado)))
         (pontuacao-cavalo-preto (second (second estado))))
-    (cond ((= cavalo *cavalo-branco*) (- pontuacao-cavalo-branco pontuacao-cavalo-preto))
-          ((= cavalo *cavalo-preto*) (- pontuacao-cavalo-preto pontuacao-cavalo-branco))
-          (t 0)
+    (cond ((and (null estado) (= cavalo *cavalo-branco*)) most-negative-double-float)
+          ((and (null estado) (= cavalo *cavalo-preto*)) most-positive-double-float)
+          ((= cavalo *cavalo-preto*) (- pontuacao-cavalo-branco pontuacao-cavalo-preto))
+          ((= cavalo *cavalo-branco*) (- pontuacao-cavalo-preto pontuacao-cavalo-branco))
     )
   )
 )

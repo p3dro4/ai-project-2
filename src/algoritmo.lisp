@@ -72,7 +72,7 @@
 (defun alfabeta (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (cache (make-hash-table)) (limite 5000) (folga 10) (tempo-inicial (get-internal-real-time)))
   "Função alfa-beta que executa o negamax com cortes alfa-beta e retorna o valor do nó e o tempo de execução"
   (let* ((jogada-calculada (negamax no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))
-          (jogada (jogada-a-realizar no (first jogada-calculada))))
+         (jogada (jogada-a-realizar no (first jogada-calculada))))
     (list (no-estado jogada) (second jogada-calculada) (/ (- (get-internal-real-time) tempo-inicial) internal-time-units-per-second))
   )
 )
