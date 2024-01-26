@@ -271,6 +271,13 @@
       "coluna-para-letra"
     )
 
+    ;; Letra para coluna
+    (verificar-igual
+      2
+      (5::letra-para-coluna #\c)
+      "letra-para-coluna"
+    )
+
     ;; Substituir
     (verificar-igual
       '(
@@ -976,7 +983,7 @@
   
     ;; Jogador anterior
     (verificar-igual
-      5::*cavalo-branco*
+      5::*cavalo-preto*
       (5::jogador-anterior (5::no-teste))
       "jogador-anterior"
     )
@@ -986,6 +993,13 @@
       5::*cavalo-branco*
       (5::jogador-anterior (5::cria-no (5::no-estado (5::no-teste)) 3 (5::no-teste)))
       "jogador-anterior-vez-cedida"
+    )
+
+    ;; Jogador próximo
+    (verificar-igual
+      5::*cavalo-branco*
+      (5::jogador-proximo (5::no-teste))
+      "jogador-proximo"
     )
 
     ;; Jogada a realizar

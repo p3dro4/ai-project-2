@@ -40,6 +40,7 @@
 
 ;; Função negamax com cortes alfabeta que recebe um nó, uma profundidade, um alfa, um beta, um jogador, uma lista de jogadores, uma função de sucessores e uma função de avaliação 
 ;; e retorna o valor do nó
+; TODO: Adidiconar a contagem de nós gerados, expandidos e os cortes realizados
 (defun negamax (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (limite 5000) (tempo-inicial (get-internal-real-time)))
   "Função negamax com cortes alfabeta"
   (let ((sucessores (funcall funcao-sucessores no jogador)))

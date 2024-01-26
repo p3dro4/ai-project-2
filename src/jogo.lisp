@@ -258,6 +258,15 @@
   )
 )
 
+;; Função auxiliar que recebe a letra da coluna e retorna o número correspondente
+(defun letra-para-coluna (letra)
+  "Retorna o número correspondente à letra da coluna"
+  (cond ((not (characterp letra)) (error "O argumento não é uma letra"))
+        ((eq letra #\a) 0)
+        (t (- (char-int letra) (char-int #\a)))
+  )
+)
+
 ;; Função que recebe um índice, uma lista e um valor (por default o valor é NIL) e
 ;; substitui pelo valor pretendido nessa posição.
 (defun substituir-posicao (i lista &optional valor)
@@ -562,12 +571,24 @@
                  (posicao-cavalo-preto (posicao-cavalo *cavalo-preto* (no-estado no)))
                  (posicao-cavalo-branco-pai (posicao-cavalo *cavalo-branco* (no-estado (no-pai no))))
                  (posicao-cavalo-preto-pai (posicao-cavalo *cavalo-preto* (no-estado (no-pai no)))))
-              (cond ((and (equal posicao-cavalo-branco posicao-cavalo-branco-pai) (not (equal posicao-cavalo-preto posicao-cavalo-preto-pai))) *cavalo-branco*)
+              (cond ((null posicao-cavalo-branco-pai) *cavalo-branco*)
+                    ((null posicao-cavalo-preto-pai) *cavalo-preto*)
+                    ((and (equal posicao-cavalo-branco posicao-cavalo-branco-pai) (not (equal posicao-cavalo-preto posicao-cavalo-preto-pai))) *cavalo-branco*)
                     ((and (equal posicao-cavalo-preto posicao-cavalo-preto-pai) (not (equal posicao-cavalo-branco posicao-cavalo-branco-pai))) *cavalo-preto*)
+                    ((equal posicao-cavalo-branco posicao-cavalo-branco-pai) *cavalo-branco*)
+                    ((equal posicao-cavalo-preto posicao-cavalo-preto-pai) *cavalo-preto*)
                     (t (jogador-anterior (no-pai no)))
               )
             )
         )
+  )
+)
+
+;; Função que retorna o jogador que vai realizar a próxima jogada.
+(defun jogador-proximo (no)
+  "Função que retorna o jogador que vai realizar a próxima jogada"
+  (cond ((equal (jogador-anterior no) *cavalo-branco*) *cavalo-preto*) 
+        (t *cavalo-branco*)
   )
 )
 
