@@ -66,7 +66,7 @@
 ;; Função que recebe um estado e retorna o estado resultante da jogada do computador
 (defun jogar (estado tempo &optional (cache (make-hash-table)))
   "Função que recebe um estado e retorna o estado resultante da jogada do computador"
-  (alfabeta (cria-no estado) 9 most-negative-double-float most-positive-double-float *cavalo-branco* (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-estado cache tempo)
+  (alfabeta (cria-no estado) 15 most-negative-double-float most-positive-double-float *cavalo-branco* (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-estado cache tempo)
 )
 
 ;;; Funções de interação com o utilizador

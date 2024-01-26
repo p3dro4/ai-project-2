@@ -39,7 +39,7 @@
   "Função negamax com cortes alfabeta"
   (let ((sucessores (funcall funcao-sucessores no jogador)))
     (cond ((or (zerop profundidade))
-            (list no (* (cond ((equal jogador (first jogadores)) 1) (t -1)) (funcall funcao-avaliacao (no-estado no) jogador))))
+            (list no (* (cond ((equal jogador (first jogadores)) 1) (t -1)) (procurar-cache (no-estado no) jogador funcao-avaliacao cache))))
           (t (cond ((null sucessores) nil)
                    (t (negamax-auxiliar no sucessores profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))
               )
@@ -68,6 +68,21 @@
   (let* ((jogada-calculada (negamax no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))
          (jogada (jogada-a-realizar no (first jogada-calculada))))
     (list (no-estado jogada) (second jogada-calculada) (/ (- (get-internal-real-time) tempo-inicial) internal-time-units-per-second))
+  )
+)
+
+;; Função que procura na cache
+(defun procurar-cache (estado jogador funcao-avaliacao cache)
+  "Função que procura na cache"
+  (let ((utilidade (gethash estado cache)))
+    (cond ((null utilidade) 
+            (let ((nova-utilidade (funcall funcao-avaliacao estado jogador)))
+              (setf (gethash estado cache) nova-utilidade)
+              nova-utilidade
+            )
+          )
+          (t utilidade)
+    )
   )
 )
 
