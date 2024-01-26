@@ -4,6 +4,11 @@
 
 (in-package :5)
 
+;;; Variáveis globais
+(defvar *nos-gerados* 0)
+(defvar *nos-expandidos* 0)
+(defvar *cortes-realizados* 0)
+
 ;;; Construtor
 
 ;; Cria um nó com o estado, a profundidade e o nó pai
@@ -34,10 +39,11 @@
 
 ;; Função negamax com cortes alfabeta que recebe um nó, uma profundidade, um alfa, um beta, um jogador, uma lista de jogadores, uma função de sucessores e uma função de avaliação 
 ;; e retorna o valor do nó
-; TODO: Adidiconar a contagem de nós gerados, expandidos e os cortes realizados
 (defun negamax (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (cache (make-hash-table)) (limite 5000) (folga 50) (tempo-inicial (get-internal-real-time)))
   "Função negamax com cortes alfabeta"
   (let ((sucessores (funcall funcao-sucessores no jogador)))
+    (setf *nos-gerados* (+ *nos-gerados* (length sucessores)))
+    (setf *nos-expandidos* (+ *nos-expandidos* 1))
     (cond ((or (zerop profundidade))
             (list no (* (cond ((equal jogador (first jogadores)) 1) (t -1)) (procurar-cache (no-estado no) jogador funcao-avaliacao cache))))
           (t (cond ((null sucessores) nil)
@@ -54,7 +60,7 @@
   (cond ((null sucessores) nil)
         ((>= (* (/ (- tempo-atual tempo-inicial) internal-time-units-per-second) 1000) (- limite folga)) nil)
         (t (let* ((valor (inverter-sinal-utilidade (negamax (car sucessores) (1- profundidade) (- beta) (- alfa) (trocar-jogador jogador jogadores) jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))))
-                 (cond ((>= (max alfa (cond ((null (second valor)) most-negative-double-float) (t (second valor)))) beta) nil)
+                 (cond ((>= (max alfa (cond ((null (second valor)) most-negative-double-float) (t (second valor)))) beta) (progn (setf *cortes-realizados* (+ *cortes-realizados* 1)) nil))
                     (t (no-max-utilidade (append (list valor) (list (negamax-auxiliar no (cdr sucessores) profundidade (max alfa (cond ((null (second valor)) most-negative-double-float) (t (second valor)))) beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))) jogador))
               )
             )
@@ -65,9 +71,12 @@
 ;; Função alfa-beta que executa o negamax com cortes alfa-beta e retorna o valor do nó e o tempo de execução
 (defun alfabeta (no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao &optional (cache (make-hash-table)) (limite 5000) (folga 10) (tempo-inicial (get-internal-real-time)))
   "Função alfa-beta que executa o negamax com cortes alfa-beta e retorna o valor do nó e o tempo de execução"
+  (setf *nos-gerados* 0)
+  (setf *nos-expandidos* 0)
+  (setf *cortes-realizados* 0)
   (let* ((jogada-calculada (negamax no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))
          (jogada (jogada-a-realizar no (first jogada-calculada))))
-    (list (no-estado jogada) (second jogada-calculada) (/ (- (get-internal-real-time) tempo-inicial) internal-time-units-per-second))
+    (list (no-estado jogada) (second jogada-calculada) (/ (- (get-internal-real-time) tempo-inicial) internal-time-units-per-second) *nos-expandidos* *nos-gerados* *cortes-realizados*)
   )
 )
 
