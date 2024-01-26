@@ -76,7 +76,7 @@
   (setf *cortes-realizados* 0)
   (let* ((jogada-calculada (negamax no profundidade alfa beta jogador jogadores funcao-sucessores funcao-avaliacao cache limite folga tempo-inicial))
          (jogada (jogada-a-realizar no (first jogada-calculada))))
-    (list (no-estado jogada) (second jogada-calculada) (/ (- (get-internal-real-time) tempo-inicial) internal-time-units-per-second) *nos-expandidos* *nos-gerados* *cortes-realizados*)
+    (list (no-estado jogada) (no-profundidade (first jogada-calculada)) (second jogada-calculada) (/ (- (get-internal-real-time) tempo-inicial) internal-time-units-per-second) *nos-expandidos* *nos-gerados* *cortes-realizados*)
   )
 )
 
