@@ -66,7 +66,7 @@
 ;; Função que recebe um estado e retorna o estado resultante da jogada do computador
 (defun jogar (estado tempo &optional (cache (make-hash-table)))
   "Função que recebe um estado e retorna o estado resultante da jogada do computador"
-  (alfabeta (cria-no estado) 15 most-negative-double-float most-positive-double-float *cavalo-branco* (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-estado cache tempo)
+  (alfabeta (cria-no estado) 9 most-negative-double-float most-positive-double-float *cavalo-branco* (list *cavalo-branco* *cavalo-preto*) 'sucessores 'avaliar-estado cache tempo)
 )
 
 ;;; Funções de interação com o utilizador
@@ -103,6 +103,11 @@
                       (escreve-tabuleiro-formatado tabuleiro t t t 1)
                       (format t "~46,1,1,'#:@<~>~%~%")
                       (ciclo-de-jogo (list tabuleiro (list 0 0)) tempo-limite jogadores cache)
+                      (let ((opcao (ler-opcao 1 "Voltar ao menu principal? [sim(1)/nao(0)] > " nil)))
+                        (cond ((= opcao 1) (iniciar cache))
+                              ((= opcao 0) (format t "A sair da aplicacao...~%"))
+                        )
+                      )
                     )
               )
           )
@@ -263,7 +268,7 @@
                           (escreve-tabuleiro-formatado (first estado-final) t t t 1)
                           (format t "~46,1,1,'#:@<~>~%")
                           (format t "utilidade: ~a~%" (second jogada))
-                          (format t "tempo de execucao: ~d ms~%~%" (* (third jogada) 1000))
+                          (format t "tempo de execucao: ~3,1f ms~%~%" (* (third jogada) 1000.0))
                           estado-final
                         )
                       )
