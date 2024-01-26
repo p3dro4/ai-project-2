@@ -127,13 +127,13 @@
 (defun escreve-tabuleiro-formatado (tabuleiro &optional (saida t) (numero-linha t) (letra-coluna t) (preenchimento-esquerda 0) (i 0))
   "Escreve o tabuleiro no ecrã formatado"
   (cond (letra-coluna (progn (cond (numero-linha (format saida "   "))) 
-                                (cond ((> preenchimento-esquerda 0) (format t "~v,a" preenchimento-esquerda " ")))
+                                (cond ((> preenchimento-esquerda 0) (format saida "~v,a" preenchimento-esquerda " ")))
                                 (format saida "   A   B   C   D   E   F   G   H   I   J~%") 
                                 (escreve-tabuleiro-formatado tabuleiro saida numero-linha nil preenchimento-esquerda i)))
         ((null tabuleiro) nil)
         ((>= i (length tabuleiro)) nil)
         (t (progn
-            (cond ((> preenchimento-esquerda 0) (format t "~v,a" preenchimento-esquerda " ")))
+            (cond ((> preenchimento-esquerda 0) (format saida "~v,a" preenchimento-esquerda " ")))
             (cond (numero-linha (format saida "~2,'0d " (1+ i))))
             (format saida "|" )
             (mapcar (lambda (cel) (cond 
@@ -387,15 +387,27 @@
   (let ((cavalo-oposto (cond ((= cavalo *cavalo-branco*) *cavalo-preto*) ((= cavalo *cavalo-preto*) *cavalo-branco*))))
     (cond ((null destino) nil)
           ((null (posicao-cavalo cavalo-oposto tabuleiro)) nil)
-          ((null (movimentos-possiveis cavalo-oposto tabuleiro)) nil)
-          ((lista-contem destino (movimentos-possiveis cavalo-oposto tabuleiro)) t)
+          ((null (movimentos-possiveis-auxiliar cavalo-oposto tabuleiro)) nil)
+          ((lista-contem destino (movimentos-possiveis-auxiliar cavalo-oposto tabuleiro)) t)
     )
   )
 )
 
 ;; Função que recebe o cavalo e o tabuleiro e 
-;;retorna uma lista com todas as posições possíveis para o cavalo.
+;; retorna uma lista com todas as posições possíveis para o cavalo,
+;; tendo em conta as regras do jogo.
 (defun movimentos-possiveis (cavalo tabuleiro)
+  "Retorna uma lista com todas as posicoes possiveis para o cavalo"
+  (let ((posicoes (movimentos-possiveis-auxiliar cavalo tabuleiro)))
+    (cond ((null posicoes) nil)
+          (t (remove-if-not (lambda (pos) (movimento-valido-p cavalo pos tabuleiro)) posicoes))
+    )
+  )
+)
+
+;; Função auxiliar que recebe o cavalo e o tabuleiro e
+;; retorna uma lista com todas as posições possíveis para o cavalo.
+(defun movimentos-possiveis-auxiliar (cavalo tabuleiro)
   "Retorna uma lista com todas as posicoes possiveis para o cavalo"
   (let ((posicao (posicao-cavalo cavalo tabuleiro)))
     (cond ((null posicao) nil)
