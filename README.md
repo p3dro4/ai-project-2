@@ -3,7 +3,7 @@
   <a href="https://github.com/p3dro4/ai-project-2">
     <img src="https://i.imgur.com/KyY6wSG.png" alt="Logo" width="80" height="80">
   </a>
-  <h3 align="center">IA Project - Part 2</h3>
+  <h3 align="center">AI Project - Part 2</h3>
 </p>
 
 ![Contributors](https://img.shields.io/github/contributors/p3dro4/ai-project-2?color=dark-green)
