@@ -23,7 +23,7 @@ The algorithm used to solve the problem is the Negamax algorithm with alpha-beta
 
 ## Related Projects
 
-* [IA Project - Part 1](https://github.com/p3dro4/ai-project-1)
+* [AI Project - Part 1](https://github.com/p3dro4/ai-project-1)
 
 ## Tech Stack
 
